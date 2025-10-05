@@ -1,0 +1,30 @@
+.features-section {
+  padding-top: 60px;
+  text-align: center;
+}
+
+.features-main-title {
+  font-size: 25px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.features-grid {
+  display: grid;
+  padding-top: 100px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+/* --- Responsividade para a grade --- */
+@media (max-width: 992px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}

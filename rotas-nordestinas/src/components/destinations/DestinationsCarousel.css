@@ -1,25 +1,22 @@
-/* src/components/destinations/DestinationsCarousel.css */
-
 .carousel-section {
   margin-bottom: 40px;
 }
 
 .carousel-title {
-  font-size: 2rem;
+  font-size: 20px;
   color: #333;
   margin-bottom: 20px;
 }
 
 .carousel-container {
   display: flex;
-  overflow-x: auto; /* A mágica do slide horizontal! */
-  gap: 20px; /* Espaçamento entre os cards */
-  padding-bottom: 15px; /* Espaço para a barra de rolagem não ficar colada */
-  /* Melhora a rolagem em telas touch */
+  overflow-x: auto;
+  gap: 20px;
+  padding-bottom: 15px;
+
   -webkit-overflow-scrolling: touch;
 }
 
-/* Esconde a barra de rolagem mas mantém a funcionalidade */
 .carousel-container::-webkit-scrollbar {
   display: none;
 }

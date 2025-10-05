@@ -1,0 +1,98 @@
+/* src/components/home/ValuesSection.css */
+
+.values-section {
+  padding: 120px 0;
+  text-align: center;
+}
+.values-main-title {
+  font-size: 25px;
+  margin-bottom: 50px;
+
+  color: #333;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  padding-top: 60px;
+}
+
+.value-card {
+  background-color: var(--cor-primaria);
+  color: var(--cor-fundo);
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(245, 134, 52, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.value-card-icon-wrapper {
+  background-color: var(--cor-fundo);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  margin-top: -80px;
+  margin-bottom: 20px;
+}
+
+.value-card-icon {
+  height: 40px;
+  width: 40px;
+}
+
+.value-card-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.value-card-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 992px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 450px;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 576px) {
+  .value-card {
+    padding: 30px 20px;
+  }
+
+  .value-card-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 20px;
+  }
+
+  .value-card-icon {
+    height: 35px;
+    width: 35px;
+  }
+
+  .value-card-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .value-card-text {
+    font-size: 0.9rem;
+  }
+}

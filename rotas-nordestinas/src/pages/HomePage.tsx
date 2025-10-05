@@ -1,9 +1,15 @@
 import { useState, useMemo } from "react";
+import { Link as ScrollLink } from "react-scroll";
 import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer"; // Lembre-se de importar o Footer se ele estiver aqui
+import Container from "../components/layout/Container"; // O componente chave
 import DestinationsCarousel from "../components/destinations/DestinationsCarousel";
 import { DESTINOS } from "../data/database";
 import type { Destino } from "../types";
 import "./HomePage.css";
+import heroImage from "../assets/images/hero.jpg";
+import FeaturesSection from "../components/home/FeaturesSections";
+import ValuesSection from "../components/home/ValuesSection";
 
 // Interface para o objeto de destinos agrupados
 interface GroupedDestinos {
@@ -13,7 +19,6 @@ interface GroupedDestinos {
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filtra e agrupa os destinos baseado na busca
   const groupedDestinos = useMemo(() => {
     const filtered = DESTINOS.filter(
       (destino) =>
@@ -21,7 +26,6 @@ const HomePage = () => {
         destino.estado.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Agrupa os destinos filtrados por estado
     return filtered.reduce((acc, destino) => {
       const { estado } = destino;
       if (!acc[estado]) {
@@ -30,62 +34,74 @@ const HomePage = () => {
       acc[estado].push(destino);
       return acc;
     }, {} as GroupedDestinos);
-  }, [searchTerm]); // Recalcula apenas quando o searchTerm muda
+  }, [searchTerm]);
 
   return (
     <div>
       <Navbar />
 
-      {/* Seção Hero (imagem principal do topo) */}
-      <header className="hero-section">
-        <h1>Explore a essência do Nordeste</h1>
-        <p>Um universo de cultura e paisagens únicas</p>
+      <header
+        id="Home"
+        className="hero-section"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
+        <Container>
+          <div className="hero-content">
+            <h1>
+              Explore a essência <br /> do Nordeste
+            </h1>
+            <p>Um universo de cultura e paisagens únicas</p>
+
+            <ScrollLink
+              to="destinos"
+              smooth={true}
+              duration={500}
+              offset={-80}
+              className="hero-button"
+            >
+              Descubra o que o Nordeste tem a oferecer
+            </ScrollLink>
+          </div>
+        </Container>
       </header>
 
-      <main className="home-content">
-        {/* Seção de Busca */}
-        <div className="search-section">
-          <h3>Descubra o Nordeste além dos roteiros convencionais</h3>
-          <input
-            type="text"
-            placeholder="Pesquise por uma cidade ou estado"
-            className="search-bar"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+      <Container>
+        <FeaturesSection />
+      </Container>
 
-        {/* Seção de Valores (estática) */}
-        <section className="values-section">
-          {/* Você pode criar componentes para cada um desses cards se quiser */}
-          <div className="value-card">
-            <h4>Missão</h4>
-            <p>Conectar viajantes à cultura, história e sabores do Nordeste.</p>
-          </div>
-          <div className="value-card">
-            <h4>Visão</h4>
-            <p>
-              Ser a principal referência online para o turismo na região
-              Nordeste.
-            </p>
-          </div>
-          <div className="value-card">
-            <h4>Valores</h4>
-            <p>Autenticidade, Respeito à cultura local e Sustentabilidade.</p>
-          </div>
-        </section>
+      <Container>
+        <ValuesSection />
+      </Container>
 
-        {/* Seção Dinâmica dos Carrosséis */}
-        <div className="destinations-list">
-          {Object.entries(groupedDestinos).map(([estado, destinos]) => (
-            <DestinationsCarousel
-              key={estado}
-              estado={estado}
-              destinos={destinos}
-            />
-          ))}
-        </div>
-      </main>
+      <Container>
+        <main className="home-content">
+          {/* Seção dos Destinos com a busca */}
+          <section id="destinos" className="destinations-section">
+            <div className="destinations-header">
+              <h2>Destinos</h2>
+              <input
+                type="text"
+                placeholder="Pesquise por um destino"
+                className="search-bar"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div className="destinations-list">
+              {Object.entries(groupedDestinos).map(([estado, destinos]) => (
+                <DestinationsCarousel
+                  key={estado}
+                  estado={estado}
+                  destinos={destinos}
+                />
+              ))}
+            </div>
+          </section>
+        </main>
+      </Container>
+
+      <Footer />
     </div>
   );
 };
