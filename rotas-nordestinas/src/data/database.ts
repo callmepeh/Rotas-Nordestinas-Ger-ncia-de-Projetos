@@ -3,7 +3,7 @@ import { type User, type Destino } from "../types";
 export const USERS: User[] = [
   {
     id: 1,
-    email: "joao@email.com",
+    email: "colaborador@gmail.com",
     senha: "123",
     nome: "João Silva",
     dataNascimento: "15/03/1995",
@@ -14,8 +14,8 @@ export const USERS: User[] = [
   },
   {
     id: 2,
-    email: "maria@email.com",
-    senha: "456",
+    email: "usuario@gmail.com",
+    senha: "123",
     nome: "Maria Joaquina",
     dataNascimento: "11/10/2002",
     estado: "Bahia",
@@ -30,7 +30,7 @@ export const DESTINOS: Destino[] = [
     id: "recife",
     estado: "Pernambuco",
     cidade: "Recife",
-    imagem: "/images/destinos/recife-capa.jpg", // Sugestão: crie uma pasta public/images/
+    imagem: "/cidade.png", // Sugestão: crie uma pasta public/images/
     descricao:
       'Recife, a capital do estado de Pernambuco, no nordeste do Brasil, é caracterizada por seus rios, pontes e ilhas. Conhecida como a "Veneza Brasileira", a cidade possui um centro histórico vibrante, o Recife Antigo, com edifícios coloniais coloridos e uma rica cena cultural.',
     pontosTuristicos: [
@@ -39,14 +39,14 @@ export const DESTINOS: Destino[] = [
         nome: "Marco Zero",
         descricao:
           "O ponto de partida de todas as estradas de Pernambuco, um lugar histórico e cultural.",
-        imagem: "/images/destinos/recife-marco-zero.jpg",
+        imagem: "/cidade.png",
       },
       {
         id: 2,
         nome: "Instituto Ricardo Brennand",
         descricao:
           "Um complexo cultural com um castelo medieval, museu de armas e uma vasta coleção de arte.",
-        imagem: "/images/destinos/recife-brennand.jpg",
+        imagem: "/cidade.png",
       },
     ],
   },
@@ -54,7 +54,7 @@ export const DESTINOS: Destino[] = [
     id: "olinda",
     estado: "Pernambuco",
     cidade: "Olinda",
-    imagem: "/images/destinos/olinda-capa.jpg",
+    imagem: "/cidade.png",
     descricao:
       "Patrimônio Mundial da UNESCO, Olinda é famosa por suas ladeiras coloridas, igrejas barrocas e um dos carnavais mais autênticos do Brasil.",
     pontosTuristicos: [
@@ -63,7 +63,7 @@ export const DESTINOS: Destino[] = [
         nome: "Alto da Sé",
         descricao:
           "Oferece uma vista panorâmica deslumbrante de Olinda e Recife, com a famosa feirinha de artesanato.",
-        imagem: "/images/destinos/olinda-alto-da-se.jpg",
+        imagem: "/cidade.png",
       },
     ],
   },
@@ -71,7 +71,7 @@ export const DESTINOS: Destino[] = [
     id: "Picos",
     estado: "Piaui",
     cidade: "Olinda",
-    imagem: "/images/destinos/olinda-capa.jpg",
+    imagem: "/cidade.png",
     descricao:
       "Patrimônio Mundial da UNESCO, Olinda é famosa por suas ladeiras coloridas, igrejas barrocas e um dos carnavais mais autênticos do Brasil.",
     pontosTuristicos: [
@@ -80,7 +80,7 @@ export const DESTINOS: Destino[] = [
         nome: "Alto da Sé",
         descricao:
           "Oferece uma vista panorâmica deslumbrante de Olinda e Recife, com a famosa feirinha de artesanato.",
-        imagem: "/images/destinos/olinda-alto-da-se.jpg",
+        imagem: "/cidade.png",
       },
     ],
   },

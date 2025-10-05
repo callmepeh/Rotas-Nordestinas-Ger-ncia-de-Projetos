@@ -1,0 +1,25 @@
+.info-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 10px;
+}
+
+.info-card-icon {
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.info-card-title {
+  color: var(--cor-primaria);
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.info-card-text {
+  color: var(--cor-secundario);
+  font-size: 16px;
+  line-height: 1.6;
+}

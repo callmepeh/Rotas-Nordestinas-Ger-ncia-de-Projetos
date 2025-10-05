@@ -1,0 +1,144 @@
+.navbar {
+  background-color: #fff;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1300px;
+  padding: 0 24px;
+}
+
+.navbar-logo {
+  cursor: pointer;
+}
+
+.navbar-logo img {
+  height: 60px; /* Ajuste a altura da sua logo */
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  padding: 5px 0;
+  position: relative;
+  font-size: 16px;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #eb662b;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.desktop-actions {
+  display: flex; /* Mostra por padrão */
+}
+
+.nav-button {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--cor-primaria);
+  background-color: transparent;
+  color: var(--cor-primaria);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: var(--cor-hover);
+  color: white;
+}
+
+.nav-button.primary {
+  background-color: var(--cor-primaria);
+  color: white;
+}
+
+.nav-button.primary:hover {
+  background-color: var(--cor-hover);
+  color: white;
+}
+
+.nav-profile-icon {
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.nav-profile-icon:hover {
+  color: orange;
+}
+
+.menu-icon {
+  display: none; /* Escondido em telas grandes */
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.mobile-nav-menu {
+  display: none; /* Escondido por padrão */
+}
+
+/* --- RESPONSIVIDADE --- */
+@media screen and (max-width: 960px) {
+  .nav-links,
+  .desktop-actions {
+    display: none; /* Esconde o menu e ações do desktop */
+  }
+
+  .menu-icon {
+    display: block; /* Mostra o ícone do hamburger */
+  }
+
+  .mobile-nav-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .mobile-actions {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+}

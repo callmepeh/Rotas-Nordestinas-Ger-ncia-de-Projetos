@@ -1,12 +1,21 @@
+.destination-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  border-radius: 16px;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
+
 .destination-card {
   position: relative;
-  min-width: 250px;
-  height: 350px;
-  border-radius: 12px;
+  min-width: 320px;
+  height: 220px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  transform: translateZ(0);
 }
 
 .destination-card:hover {
@@ -21,20 +30,29 @@
 
 .card-overlay {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  bottom: 0;
+
+  background-color: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   padding: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.destination-card:hover .card-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .card-title {
   color: white;
   margin: 0;
-  font-size: 1.5rem;
-}
-
-.destination-card-link {
-  text-decoration: none;
-  color: inherit;
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
