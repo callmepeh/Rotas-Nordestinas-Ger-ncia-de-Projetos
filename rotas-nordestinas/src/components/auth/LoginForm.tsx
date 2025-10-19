@@ -1,24 +1,11 @@
 import React, { useState } from "react";
-// Ícones do react-icons removidos, conforme solicitado
+// Assumindo que useAuth e useUI estão disponíveis no seu ambiente
 // import { useAuth } from "../../context/AuthContext";
 // import { useUI } from "../../context/UIContext";
 
-// Definição das cores personalizadas
-const colors = {
-  primary: "#eb662b",
-  secondary: "#ef9f4e",
-  hover: "#d84606",
-  grayPrimary: "#e9e9e9",
-  graySecondary: "#adadad",
-  background: "#ffffff",
-  success: "#28a745",
-  error: "#dc3545",
-};
+// NOTA: O objeto 'colors' foi removido para usar as variáveis CSS globais
 
 const LoginForm = () => {
-  // const { login } = useAuth(); // Descomente quando usar em seu projeto
-  // const { closeModal } = useUI(); // Descomente quando usar em seu projeto
-
   // Funções de Contexto simuladas para rodar o código fora do seu ambiente
   const login = (email: string, password: string) => {
     console.log("Tentativa de login");
@@ -44,10 +31,12 @@ const LoginForm = () => {
     }
   };
 
+  // --- Estilos Comuns e Dinâmicos ---
+
   const commonInputStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 15px",
-    border: `1px solid ${colors.primary}`, // Usando cor primária
+    border: `1px solid var(--cor-primaria)`, // Usando variável CSS
     borderRadius: "25px",
     boxSizing: "border-box",
     fontSize: "16px",
@@ -59,10 +48,10 @@ const LoginForm = () => {
   const primaryButtonStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 10px",
-    background: colors.background,
-    border: `1px solid ${colors.primary}`,
+    background: "var(--cor-fundo)", // Usando variável CSS
+    border: `1px solid var(--cor-primaria)`, // Usando variável CSS
     borderRadius: "25px",
-    color: colors.primary,
+    color: "var(--cor-primaria)", // Usando variável CSS
     fontSize: "16px",
     fontWeight: "bold",
     cursor: "pointer",
@@ -73,14 +62,18 @@ const LoginForm = () => {
 
   const googleButtonStyle: React.CSSProperties = {
     ...primaryButtonStyle,
-    background: isGoogleHovered ? colors.grayPrimary : colors.background, // Fundo cinza claro no hover
+    background: isGoogleHovered
+      ? "var(--cor-cinza-principal)"
+      : "var(--cor-fundo)", // Usando variável CSS
     color: "#333",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     border: `1px solid ${
-      isGoogleHovered ? colors.graySecondary : colors.graySecondary
-    }`, // Borda cinza
+      isGoogleHovered
+        ? "var(--cor-cinza-secundario)"
+        : "var(--cor-cinza-secundario)"
+    }`, // Usando variável CSS
     marginBottom: "30px",
     fontWeight: "normal",
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -89,9 +82,11 @@ const LoginForm = () => {
   // Estilo do botão de Login (o principal)
   const loginButtonStyle: React.CSSProperties = {
     ...primaryButtonStyle,
-    background: isPrimaryHovered ? colors.hover : colors.primary,
-    color: colors.background,
-    border: `1px solid ${isPrimaryHovered ? colors.hover : colors.primary}`,
+    background: isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)", // Usando variável CSS
+    color: "var(--cor-fundo)", // Usando variável CSS
+    border: `1px solid ${
+      isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)"
+    }`, // Usando variável CSS
   };
 
   return (
@@ -101,7 +96,7 @@ const LoginForm = () => {
         position: "relative",
         maxWidth: "400px",
         margin: "auto",
-        backgroundColor: colors.background,
+        backgroundColor: "var(--cor-fundo)", // Usando variável CSS
       }}
     >
       {/* Título */}
@@ -127,7 +122,6 @@ const LoginForm = () => {
         onTouchStart={() => setIsGoogleHovered(true)}
         onTouchEnd={() => setIsGoogleHovered(false)}
       >
-        {/* Ícone do Google (SVG simples) */}
         <img
           src="..\src\assets\icons\google.svg"
           alt="Google Logo"

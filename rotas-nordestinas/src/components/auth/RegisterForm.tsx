@@ -3,25 +3,9 @@ import React, { useState } from "react";
 // import { useAuth } from "../../context/AuthContext";
 // import { useUI } from "../../context/UIContext";
 
-// Definição das cores personalizadas
-const colors = {
-  primary: "#eb662b",
-  secondary: "#ef9f4e",
-  hover: "#d84606",
-  grayPrimary: "#e9e9e9",
-  graySecondary: "#adadad",
-  background: "#ffffff",
-  success: "#28a745",
-  error: "#dc3545",
-};
-
-// Componente simulado para ícone de olho (removido, mas mantendo a estrutura
-// para evitar erros caso estivesse sendo usado em outro lugar)
+// NOTA: O objeto 'colors' foi removido para usar as variáveis CSS globais
 
 const RegisterForm = () => {
-  // const { register } = useAuth(); // Descomente quando usar em seu projeto
-  // const { closeModal, showLoginModal } = useUI(); // Descomente quando usar em seu projeto
-
   // Funções de Contexto simuladas para rodar o código fora do seu ambiente
   const register = (data: any) => ({
     success: true,
@@ -41,10 +25,6 @@ const RegisterForm = () => {
     telefone: "",
   });
 
-  // Removendo estados de visibilidade da senha conforme solicitado
-  // const [showPassword, setShowPassword] = useState(false);
-  // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   // Estados para controle de hover dos botões
   const [isPrimaryHovered, setIsPrimaryHovered] = useState(false);
   const [isGoogleHovered, setIsGoogleHovered] = useState(false);
@@ -57,7 +37,6 @@ const RegisterForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.senha !== formData.confirmarSenha) {
-      // Substituído alert() por console.error() para evitar erros em iframes
       console.error("As senhas não coincidem!");
       return;
     }
@@ -79,7 +58,7 @@ const RegisterForm = () => {
   const commonInputStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 15px",
-    border: `1px solid ${colors.primary}`, // Usando cor primária
+    border: `1px solid var(--cor-primaria)`, // Usando variável CSS
     borderRadius: "25px",
     boxSizing: "border-box",
     fontSize: "16px",
@@ -91,28 +70,34 @@ const RegisterForm = () => {
   const primaryButtonStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 10px",
-    background: isPrimaryHovered ? colors.hover : colors.primary, // Cor dinâmica
-    border: `1px solid ${isPrimaryHovered ? colors.hover : colors.primary}`,
+    background: isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)", // Usando variáveis CSS
+    border: `1px solid ${
+      isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)"
+    }`, // Usando variáveis CSS
     borderRadius: "25px",
-    color: colors.background,
+    color: "var(--cor-fundo)", // Usando variável CSS
     fontSize: "16px",
     fontWeight: "bold",
     cursor: "pointer",
     marginTop: "20px",
     transition: "background 0.2s, border-color 0.2s",
-    userSelect: "none" as const, // Para simular clique
+    userSelect: "none" as const,
   };
 
   const googleButtonStyle: React.CSSProperties = {
     ...primaryButtonStyle,
-    background: isGoogleHovered ? colors.grayPrimary : colors.background, // Fundo cinza claro no hover
+    background: isGoogleHovered
+      ? "var(--cor-cinza-principal)"
+      : "var(--cor-fundo)", // Usando variáveis CSS
     color: "#333",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     border: `1px solid ${
-      isGoogleHovered ? colors.graySecondary : colors.graySecondary
-    }`, // Borda cinza
+      isGoogleHovered
+        ? "var(--cor-cinza-secundario)"
+        : "var(--cor-cinza-secundario)"
+    }`, // Usando variáveis CSS
     marginBottom: "30px",
     fontWeight: "normal",
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -125,7 +110,7 @@ const RegisterForm = () => {
         position: "relative",
         maxWidth: "400px",
         margin: "auto",
-        backgroundColor: colors.background,
+        backgroundColor: "var(--cor-fundo)", // Usando variável CSS
       }}
     >
       {/* Botão de Fechar (X) */}
@@ -166,9 +151,9 @@ const RegisterForm = () => {
         onTouchStart={() => setIsGoogleHovered(true)}
         onTouchEnd={() => setIsGoogleHovered(false)}
       >
+        {/* Ícone do Google usando o caminho local */}
         <img
           src="..\src\assets\icons\google.svg"
-          alt="Google Logo"
           style={{ width: "20px", height: "20px", marginRight: "10px" }}
         />
         Fazer login com o google
@@ -199,7 +184,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* Campo Senha (EyeIcon e toggle removidos) */}
+        {/* Campo Senha */}
         <div style={{ marginBottom: "20px", position: "relative" }}>
           <input
             name="senha"
@@ -211,7 +196,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* Campo Confirmar Senha (EyeIcon e toggle removidos) */}
+        {/* Campo Confirmar Senha */}
         <div style={{ marginBottom: "20px", position: "relative" }}>
           <input
             name="confirmarSenha"
