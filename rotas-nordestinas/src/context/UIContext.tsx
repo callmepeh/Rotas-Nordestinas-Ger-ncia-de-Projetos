@@ -1,11 +1,13 @@
 import React, { createContext, useState, useContext } from "react";
 
-type ModalType = "login" | "register" | null;
+// 1. Adicionamos "collaborator" aos tipos de modais possíveis
+type ModalType = "login" | "register" | "collaborator" | null;
 
 interface UIContextType {
   openModal: ModalType;
   showLoginModal: () => void;
   showRegisterModal: () => void;
+  showCollaboratorModal: () => void;
   closeModal: () => void;
 }
 
@@ -24,12 +26,15 @@ export const UIProvider: React.FC<UIProviderProps> = ({ children }) => {
 
   const showLoginModal = () => setOpenModal("login");
   const showRegisterModal = () => setOpenModal("register");
+  // 2. Criamos a função para abrir o modal de colaborador
+  const showCollaboratorModal = () => setOpenModal("collaborator");
   const closeModal = () => setOpenModal(null);
 
   const value = {
     openModal,
     showLoginModal,
     showRegisterModal,
+    showCollaboratorModal,
     closeModal,
   };
 

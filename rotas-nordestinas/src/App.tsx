@@ -2,10 +2,12 @@
 
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import DestinationDetailPage from "./pages/DestinationDetailPage"; // 1. IMPORTE A NOVA PÁGINA
+import DestinationDetailPage from "./pages/DestinationDetailPage";
 import Modal from "./components/common/Modal";
 import LoginForm from "./components/auth/LoginForm";
 import RegisterForm from "./components/auth/RegisterForm";
+// 1. IMPORTE O SEU FORMULÁRIO DE COLABORADOR
+import CollaboratorForm from "./components/auth/CollaboratorForm"; // <<< ADICIONE ESTA LINHA (ajuste o caminho se necessário)
 import { useUI } from "./context/UIContext";
 
 function App() {
@@ -15,7 +17,6 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {}
         <Route path="/destinos/:id" element={<DestinationDetailPage />} />
       </Routes>
 
@@ -28,6 +29,12 @@ function App() {
       {openModal === "register" && (
         <Modal>
           <RegisterForm />
+        </Modal>
+      )}
+
+      {openModal === "collaborator" && (
+        <Modal>
+          <CollaboratorForm />
         </Modal>
       )}
     </>

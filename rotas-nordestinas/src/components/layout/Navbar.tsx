@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import { NavLink, Link as RouterLink } from "react-router-dom";
-
 import { Link as ScrollLink } from "react-scroll";
 import { useAuth } from "../../context/AuthContext";
 import { useUI } from "../../context/UIContext";
@@ -12,34 +10,46 @@ import Container from "./Container";
 
 const Navbar = () => {
   const { isAuthenticated, user } = useAuth();
-  const { showLoginModal, showRegisterModal } = useUI();
+  const { showLoginModal, showRegisterModal, showCollaboratorModal } = useUI();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const renderUserActions = () => {
-    if (isAuthenticated && user?.role === "colaborador") {
-      return (
-        <div className="nav-actions">
-          <RouterLink to="/sugerir-rota" className="nav-link">
-            Crie uma Rota
-          </RouterLink>
-          <RouterLink to="/perfil" className="nav-profile-icon">
-            <FaUserCircle size={28} />
-          </RouterLink>
-        </div>
-      );
+    if (!isAuthenticated) {
+      if (user?.role === "colaborador") {
+        return (
+          <div className="nav-actions">
+            <RouterLink to="/sugerir-rota" className="nav-link">
+              Crie uma Rota
+            </RouterLink>
+            <RouterLink to="/perfil" className="nav-profile-icon">
+              <FaUserCircle size={28} />
+            </RouterLink>
+          </div>
+        );
+      }
+      // Se for um usuário comum, mostra o botão para se tornar colaborador
+      if (!isAuthenticated) {
+        return (
+          <div className="nav-actions">
+            {/* 2. Alterado de RouterLink para button para chamar a função do modal */}
+            <button
+              onClick={() => {
+                showCollaboratorModal();
+                setIsMenuOpen(false); // Fecha o menu mobile se estiver aberto
+              }}
+              className="nav-link as-button" // Mantém a classe de estilo do link
+            >
+              Seja um colaborador
+            </button>
+            <RouterLink to="/perfil" className="nav-profile-icon">
+              <FaUserCircle size={28} />
+            </RouterLink>
+          </div>
+        );
+      }
     }
-    if (isAuthenticated) {
-      return (
-        <div className="nav-actions">
-          <RouterLink to="/seja-colaborador" className="nav-link">
-            Seja um colaborador
-          </RouterLink>
-          <RouterLink to="/perfil" className="nav-profile-icon">
-            <FaUserCircle size={28} />
-          </RouterLink>
-        </div>
-      );
-    }
+
+    // Cenário 2: Usuário não está autenticado
     return (
       <div className="nav-actions">
         <button
@@ -77,7 +87,6 @@ const Navbar = () => {
       >
         Home
       </ScrollLink>
-
       <ScrollLink
         to="destinos"
         smooth={true}
@@ -89,7 +98,6 @@ const Navbar = () => {
       >
         Destinos
       </ScrollLink>
-
       <ScrollLink
         to="sobre"
         smooth={true}
@@ -101,7 +109,6 @@ const Navbar = () => {
       >
         Sobre
       </ScrollLink>
-
       <NavLink
         to="/favoritos"
         className="nav-link"
@@ -119,11 +126,8 @@ const Navbar = () => {
           <RouterLink to="/" className="navbar-logo">
             <img src={logo} alt="Rotas Nordestinas Logo" />
           </RouterLink>
-
           <div className="nav-links">{navMenuLinks}</div>
-
           <div className="desktop-actions">{renderUserActions()}</div>
-
           <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </div>

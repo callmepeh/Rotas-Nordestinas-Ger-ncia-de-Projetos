@@ -41,6 +41,16 @@
   font-size: 16px;
 }
 
+/* --- ADICIONADO PARA O BOTÃO-LINK --- */
+/* Este trecho remove o estilo padrão do botão e o alinha com os links */
+.nav-link.as-button {
+  background: none;
+  border: none;
+  font-family: inherit; /* Usa a mesma fonte do restante do site */
+  cursor: pointer;
+}
+/* --- FIM DA ADIÇÃO --- */
+
 .nav-link::after {
   content: "";
   position: absolute;
