@@ -31,6 +31,7 @@ export const DESTINOS: Destino[] = [
     estado: "Pernambuco",
     cidade: "Recife",
     imagem: "/cidade.png", // Sugestão: crie uma pasta public/images/
+    imagemCapa: "/cidades.jpeg",
     descricao:
       'Recife, a capital do estado de Pernambuco, no nordeste do Brasil, é caracterizada por seus rios, pontes e ilhas. Conhecida como a "Veneza Brasileira", a cidade possui um centro histórico vibrante, o Recife Antigo, com edifícios coloniais coloridos e uma rica cena cultural.',
     pontosTuristicos: [
@@ -55,6 +56,7 @@ export const DESTINOS: Destino[] = [
     estado: "Pernambuco",
     cidade: "Olinda",
     imagem: "/cidade.png",
+    imagemCapa: "/cidades.jpeg",
     descricao:
       "Patrimônio Mundial da UNESCO, Olinda é famosa por suas ladeiras coloridas, igrejas barrocas e um dos carnavais mais autênticos do Brasil.",
     pontosTuristicos: [
@@ -72,6 +74,7 @@ export const DESTINOS: Destino[] = [
     estado: "Piaui",
     cidade: "Olinda",
     imagem: "/cidade.png",
+    imagemCapa: "/cidades.jpeg",
     descricao:
       "Patrimônio Mundial da UNESCO, Olinda é famosa por suas ladeiras coloridas, igrejas barrocas e um dos carnavais mais autênticos do Brasil.",
     pontosTuristicos: [

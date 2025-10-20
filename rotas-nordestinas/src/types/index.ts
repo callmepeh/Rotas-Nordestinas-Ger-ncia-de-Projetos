@@ -31,6 +31,7 @@ export interface Destino {
   estado: string;
   cidade: string;
   imagem: string;
+  imagemCapa: string;
   descricao: string;
   pontosTuristicos: PontoTuristico[];
   // Podemos adicionar outros campos que vimos no design depois

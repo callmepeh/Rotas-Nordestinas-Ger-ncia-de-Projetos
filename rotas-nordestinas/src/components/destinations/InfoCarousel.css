@@ -1,0 +1,28 @@
+.info-carousel-section {
+  margin: 40px 0;
+}
+
+.info-carousel-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+.info-carousel-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+  padding: 10px;
+}
+
+.info-carousel-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.info-carousel-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}

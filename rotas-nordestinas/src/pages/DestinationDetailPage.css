@@ -1,4 +1,73 @@
-/* src/components/destinations/DestinationCard.css */
+.detail-hero {
+  width: 85%;
+  margin: 0px auto 0 auto;
+  height: 72vh;
+  border-radius: 8px;
+  overflow: hidden;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: var(--cor-fundo);
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* .detail-hero {
+  height: 100%;
+  display: flex;
+  align-items: center;
+} */
+
+.detail-hero {
+  text-align: left;
+  /* max-width: 600px; */
+  padding-left: 0;
+  align-items: end;
+}
+
+.detail-hero h1 {
+  font-size: 39px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.2rem;
+  line-height: 1.2;
+  padding: 0 15px;
+}
+
+.flex_area { 
+  width: 85%;
+  margin: 0px auto 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: left; 
+  flex-direction: column;
+  /* gap: 40px; */
+  /* margin: 20px;  */
+}
+
+.sugested_user { 
+  width: 85%;
+  font-size: 16px;
+  margin-bottom: 0px;
+  color: black;
+}
+
+.user { 
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user p { 
+    font-size: 20px;
+    color: var(--cor-primaria);
+}
+
+.user svg { 
+    color: var(--cor-primaria);
+}
 
 .destination-card-link {
   text-decoration: none;

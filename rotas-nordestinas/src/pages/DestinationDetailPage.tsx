@@ -1,9 +1,11 @@
-// src/pages/DestinationDetailPage.tsx
-
 import { useParams } from "react-router-dom";
 import { DESTINOS } from "../data/database";
+import Container from "../components/layout/Container"; 
 import Navbar from "../components/layout/Navbar";
-import "./DestinationDetailPage.css"; // Estilos para a página
+import "./DestinationDetailPage.css"; 
+import { FaUserCircle } from "react-icons/fa";
+import InfoCarousel from "../components/destinations/InfoCarousel";
+
 
 const DestinationDetailPage = () => {
   // O hook useParams() pega os parâmetros da URL.
@@ -31,31 +33,59 @@ const DestinationDetailPage = () => {
       <Navbar />
       <div
         className="detail-hero"
-        style={{ backgroundImage: `url(${destino.imagem})` }}
+        style={{ backgroundImage: `url(${destino.imagemCapa})` }}
       >
         <h1>{destino.cidade}</h1>
       </div>
+
+      <div className="flex_area">
+          <p className="sugested_user">Rota sugerida por:</p>
+          <div className="user">
+              <FaUserCircle size={30} />
+              <p>Viviany Silva</p>
+          </div>
+      </div>  
+      
+      <Container>
       <main className="detail-container">
         <section className="description-section">
           <h2>Descrição</h2>
           <p>{destino.descricao}</p>
         </section>
+        
+        <div className="carousel-section">
+          <InfoCarousel
+            titulo="Pontos Turísticos"
+            itens={destino.pontosTuristicos.map(pt => ({
+              id: String(pt.id),      
+              imagem: pt.imagem,
+              nome: pt.nome,
+              descricao: pt.descricao
+            }))}
+          />
 
-        <section className="poi-section">
-          <h2>Pontos Turísticos</h2>
-          <div className="poi-grid">
-            {destino.pontosTuristicos.map((ponto) => (
-              <div key={ponto.id} className="poi-card">
-                <img src={ponto.imagem} alt={ponto.nome} />
-                <h3>{ponto.nome}</h3>
-                <p>{ponto.descricao}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+          {/* <InfoCarousel
+            titulo="Atividades"
+            itens={destino.atividades.map(a => ({
+              id: String(a.id),
+              imagem: a.imagem,
+              nome: a.nome,
+              descricao: a.descricao
+            }))}
+          />
 
-        {/* Aqui entrariam as outras seções como "Atividades", "Como Chegar", etc. */}
+          <InfoCarousel
+            titulo="Dicas"
+            itens={destino.dicas.map(d => ({
+              id: String(d.id),
+              imagem: d.imagem,
+              nome: d.nome,
+              descricao: d.descricao
+            }))}
+          /> */}
+        </div>
       </main>
+    </Container>
     </div>
   );
 };
