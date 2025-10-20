@@ -6,6 +6,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s;
     flex-shrink: 0;
+    padding: 15px   ;
 }
 
 .info-card:hover {
@@ -14,10 +15,7 @@
 
 .info-card-image {
   width: 100%;
-  height: 100%;
-  justify-items: center;
-  /* object-fit: cover; */
-  margin: 15px;
+  border-radius: 10px;
 }
 
 .info-card-content {
