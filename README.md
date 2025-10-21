@@ -54,7 +54,7 @@ O gerenciamento de riscos contempla:
 - Monitoramento semanal dos riscos.  
 
 📄 Detalhes completos no arquivo:  
-[`docs/RotasNordestinas_GerenciaDeProjetos.pdf`](./docs/RotasNordestinas_GerenciaDeProjetos.pdf)
+[`docs/RotasNordestinas_GerenciaDeProjetos.pdf`]([./docs/RotasNordestinas_GerenciaDeProjetos.pdf](https://github.com/callmepeh/Rotas-Nordestinas-Ger-ncia-de-Projetos/blob/main/Documentacao_I___Gerencia_de_Projetos.pdf))
 
 ---
 
