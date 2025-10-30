@@ -15,7 +15,9 @@ const Navbar = () => {
 
   const renderUserActions = () => {
     if (!isAuthenticated) {
-      if (user?.role === "colaborador") {
+      //tira esse !
+      if (user?.role !== "colaborador") {
+        //aqui é igual
         return (
           <div className="nav-actions">
             <RouterLink to="/sugerir-rota" className="nav-link">

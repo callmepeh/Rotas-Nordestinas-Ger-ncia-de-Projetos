@@ -1,11 +1,10 @@
 import { useParams } from "react-router-dom";
 import { DESTINOS } from "../data/database";
-import Container from "../components/layout/Container"; 
+import Container from "../components/layout/Container";
 import Navbar from "../components/layout/Navbar";
-import "./DestinationDetailPage.css"; 
+import "./DestinationDetailPage.css";
 import { FaUserCircle } from "react-icons/fa";
 import InfoCarousel from "../components/destinations/InfoCarousel";
-
 
 const DestinationDetailPage = () => {
   // O hook useParams() pega os parâmetros da URL.
@@ -39,32 +38,32 @@ const DestinationDetailPage = () => {
       </div>
 
       <div className="flex_area">
-          <p className="sugested_user">Rota sugerida por:</p>
-          <div className="user">
-              <FaUserCircle size={30} />
-              <p>Viviany Silva</p>
-          </div>
-      </div>  
-      
-      <Container>
-      <main className="detail-container">
-        <section className="description-section">
-          <h2>Descrição</h2>
-          <p>{destino.descricao}</p>
-        </section>
-        
-        <div className="carousel-section">
-          <InfoCarousel
-            titulo="Pontos Turísticos"
-            itens={destino.pontosTuristicos.map(pt => ({
-              id: String(pt.id),      
-              imagem: pt.imagem,
-              nome: pt.nome,
-              descricao: pt.descricao
-            }))}
-          />
+        <p className="sugested_user">Rota sugerida por:</p>
+        <div className="user">
+          <FaUserCircle size={30} />
+          <p>Viviany Silva</p>
+        </div>
+      </div>
 
-          {/* <InfoCarousel
+      <Container>
+        <main className="detail-container">
+          <section className="description-section">
+            <h2>Descrição</h2>
+            <p>{destino.descricao}</p>
+          </section>
+
+          <div className="carousel-section">
+            <InfoCarousel
+              titulo="Pontos Turísticos"
+              itens={destino.pontosTuristicos.map((pt) => ({
+                id: String(pt.id),
+                imagem: pt.imagem,
+                nome: pt.nome,
+                descricao: pt.descricao,
+              }))}
+            />
+
+            {/* <InfoCarousel
             titulo="Atividades"
             itens={destino.atividades.map(a => ({
               id: String(a.id),
@@ -83,9 +82,9 @@ const DestinationDetailPage = () => {
               descricao: d.descricao
             }))}
           /> */}
-        </div>
-      </main>
-    </Container>
+          </div>
+        </main>
+      </Container>
     </div>
   );
 };
