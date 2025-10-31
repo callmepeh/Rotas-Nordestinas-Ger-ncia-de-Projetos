@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import DestinationDetailPage from "./pages/DestinationDetailPage";
 import Modal from "./components/common/Modal";
+import SugerirRotaPage from "./pages/SugerirRotaPage";
 import LoginForm from "./components/auth/LoginForm";
 import RegisterForm from "./components/auth/RegisterForm";
 // 1. IMPORTE O SEU FORMULÁRIO DE COLABORADOR
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/destinos/:id" element={<DestinationDetailPage />} />
+        <Route path="/sugerir-rota" element={<SugerirRotaPage />} />
       </Routes>
 
       {openModal === "login" && (

@@ -1,9 +1,18 @@
 .info-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   gap: 10px;
+
+  box-shadow: none;
+  transition: none;
+}
+
+.info-card:hover {
+  /* Garante que nada mude ao passar o mouse */
+  transform: none;
+  box-shadow: none;
 }
 
 .info-card-icon {

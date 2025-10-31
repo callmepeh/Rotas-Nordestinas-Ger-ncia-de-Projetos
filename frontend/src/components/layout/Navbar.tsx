@@ -1,6 +1,13 @@
+// src/components/layout/Navbar.tsx
+
 import { useState } from "react";
-import { NavLink, Link as RouterLink } from "react-router-dom";
-import { Link as ScrollLink } from "react-scroll";
+import {
+  NavLink,
+  Link as RouterLink,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import { scroller } from "react-scroll";
 import { useAuth } from "../../context/AuthContext";
 import { useUI } from "../../context/UIContext";
 import logo from "../../assets/logo.svg";
@@ -13,8 +20,27 @@ const Navbar = () => {
   const { showLoginModal, showRegisterModal, showCollaboratorModal } = useUI();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavAndScroll = (sectionId: string) => {
+    setIsMenuOpen(false); // Fecha o menu mobile primeiro
+
+    if (location.pathname === "/") {
+      scroller.scrollTo(sectionId, {
+        duration: 500,
+        smooth: true,
+        offset: -80,
+      });
+    } else {
+      navigate("/", { state: { scrollTo: sectionId } });
+    }
+  };
+
   const renderUserActions = () => {
-    if (!isAuthenticated) {
+    // Cenário 1: Usuário está autenticado
+    if (isAuthenticated) {
+      // Se for um colaborador, mostra "Crie uma Rota"
       if (user?.role === "colaborador") {
         return (
           <div className="nav-actions">
@@ -27,17 +53,16 @@ const Navbar = () => {
           </div>
         );
       }
-      // Se for um usuário comum, mostra o botão para se tornar colaborador
-      if (!isAuthenticated) {
+      // Se for um usuário comum logado, mostra "Seja um colaborador"
+      else {
         return (
           <div className="nav-actions">
-            {/* 2. Alterado de RouterLink para button para chamar a função do modal */}
             <button
               onClick={() => {
                 showCollaboratorModal();
-                setIsMenuOpen(false); // Fecha o menu mobile se estiver aberto
+                setIsMenuOpen(false);
               }}
-              className="nav-link as-button" // Mantém a classe de estilo do link
+              className="nav-link as-button"
             >
               Seja um colaborador
             </button>
@@ -76,39 +101,26 @@ const Navbar = () => {
 
   const navMenuLinks = (
     <>
-      <ScrollLink
-        to="Home"
-        smooth={true}
-        duration={500}
-        spy={true}
-        offset={-80}
+      <RouterLink
+        to="/"
         className="nav-link"
         onClick={() => setIsMenuOpen(false)}
       >
         Home
-      </ScrollLink>
-      <ScrollLink
-        to="destinos"
-        smooth={true}
-        duration={500}
-        spy={true}
-        offset={-80}
-        className="nav-link"
-        onClick={() => setIsMenuOpen(false)}
-      >
-        Destinos
-      </ScrollLink>
-      <ScrollLink
-        to="sobre"
-        smooth={true}
-        duration={500}
-        spy={true}
-        offset={-80}
-        className="nav-link"
-        onClick={() => setIsMenuOpen(false)}
+      </RouterLink>
+      <button
+        onClick={() => handleNavAndScroll("sobre")}
+        className="nav-link as-button"
       >
         Sobre
-      </ScrollLink>
+      </button>
+      <button
+        onClick={() => handleNavAndScroll("destinos")}
+        className="nav-link as-button"
+      >
+        Destinos
+      </button>
+
       <NavLink
         to="/favoritos"
         className="nav-link"

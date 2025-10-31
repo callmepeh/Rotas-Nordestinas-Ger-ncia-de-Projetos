@@ -28,3 +28,14 @@
     grid-template-columns: 1fr;
   }
 }
+
+.features-grid .info-card {
+  box-shadow: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+.features-grid .info-card:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}

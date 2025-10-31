@@ -1,15 +1,18 @@
-import { useState, useMemo } from "react";
-import { Link as ScrollLink } from "react-scroll";
+// src/pages/HomePage.tsx
+
+import { useState, useMemo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { scroller, Link as ScrollLink } from "react-scroll";
 import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer"; // Lembre-se de importar o Footer se ele estiver aqui
-import Container from "../components/layout/Container"; // O componente chave
+import Footer from "../components/layout/Footer";
+import Container from "../components/layout/Container";
 import DestinationsCarousel from "../components/destinations/DestinationsCarousel";
-import { DESTINOS } from "../data/database";
-import type { Destino } from "../types";
-import "./HomePage.css";
-import heroImage from "../assets/images/hero.jpg";
 import FeaturesSection from "../components/home/FeaturesSections";
 import ValuesSection from "../components/home/ValuesSection";
+import { DESTINOS } from "../data/database";
+import type { Destino } from "../types";
+import heroImage from "../assets/images/hero.jpg";
+import "./HomePage.css";
 
 // Interface para o objeto de destinos agrupados
 interface GroupedDestinos {
@@ -18,7 +21,20 @@ interface GroupedDestinos {
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
 
+  // Efeito para rolar a tela quando vindo de outra página
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      scroller.scrollTo(location.state.scrollTo, {
+        duration: 500,
+        smooth: true,
+        offset: -80,
+      });
+    }
+  }, [location]);
+
+  // Lógica de busca e agrupamento dos destinos
   const groupedDestinos = useMemo(() => {
     const filtered = DESTINOS.filter(
       (destino) =>
@@ -69,13 +85,13 @@ const HomePage = () => {
         <FeaturesSection />
       </Container>
 
-      <Container>
+      {/* A seção "Sobre" precisa ter o ID "sobre" para o scroll funcionar */}
+      <div id="sobre">
         <ValuesSection />
-      </Container>
+      </div>
 
       <Container>
         <main className="home-content">
-          {/* Seção dos Destinos com a busca */}
           <section id="destinos" className="destinations-section">
             <div className="destinations-header">
               <h2>Destinos</h2>
