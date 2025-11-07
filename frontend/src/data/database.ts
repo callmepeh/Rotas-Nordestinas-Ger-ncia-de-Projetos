@@ -50,6 +50,29 @@ export const DESTINOS: Destino[] = [
         imagem: "/cidade.png",
       },
     ],
+    comoChegar: [
+      {
+        id: 1,
+        tipo: "Terrestre",
+        titulo: "Terminal Integrado de Passageiros (TIP)",
+        descricao:
+          "O acesso rodoviário a Recife pode ser feito pelas BR-101 e BR-232. O Terminal Integrado de Passageiros (TIP) recebe ônibus de diversas capitais e cidades do Nordeste.",
+      },
+      {
+        id: 2,
+        tipo: "Aéreo",
+        titulo: "Aeroporto Internacional do Recife / Guararapes – Gilberto Freyre",
+        descricao:
+          "O aeroporto fica a cerca de 11 km do centro e recebe voos nacionais e internacionais. Há opções de táxi, transporte por aplicativo e metrô para o deslocamento até as principais áreas da cidade.",
+      },
+      {
+        id: 3,
+        tipo: "Marítimo",
+        titulo: "Porto do Recife",
+        descricao:
+          "Localizado próximo ao centro histórico, o Porto do Recife recebe cruzeiros marítimos e pequenas embarcações turísticas. É uma porta de entrada charmosa para quem chega pelo litoral.",
+      },
+    ],
   },
   {
     id: "olinda",
@@ -68,6 +91,23 @@ export const DESTINOS: Destino[] = [
         imagem: "/cidade.png",
       },
     ],
+    comoChegar: [
+      {
+        id: 1,
+        tipo: "Terrestre",
+        titulo: "Acesso Rodoviário a partir de Recife",
+        descricao:
+          "Olinda está a cerca de 10 km do centro de Recife e pode ser acessada pelas avenidas Agamenon Magalhães e Presidente Kennedy, ou pela PE-15. Há linhas de ônibus metropolitanos que conectam os principais bairros de Recife a Olinda em poucos minutos.",
+      },
+      {
+        id: 2,
+        tipo: "Aéreo",
+        titulo: "Aeroporto Internacional do Recife / Guararapes – Gilberto Freyre",
+        descricao:
+          "O aeroporto mais próximo é o de Recife, localizado a cerca de 20 km de Olinda. De lá, é possível seguir de táxi, aplicativo ou transporte público até o centro histórico de Olinda em aproximadamente 30 minutos.",
+      },
+
+    ],
   },
   {
     id: "Picos",
@@ -84,6 +124,22 @@ export const DESTINOS: Destino[] = [
         descricao:
           "Oferece uma vista panorâmica deslumbrante de Olinda e Recife, com a famosa feirinha de artesanato.",
         imagem: "/cidade.png",
+      },
+    ],
+    comoChegar: [
+      {
+        id: 1,
+        tipo: "Terrestre",
+        titulo: "Acesso Rodoviário a partir de Recife",
+        descricao:
+          "Olinda está a cerca de 10 km do centro de Recife e pode ser acessada pelas avenidas Agamenon Magalhães e Presidente Kennedy, ou pela PE-15. Há linhas de ônibus metropolitanos que conectam os principais bairros de Recife a Olinda em poucos minutos.",
+      },
+      {
+        id: 2,
+        tipo: "Aéreo",
+        titulo: "Aeroporto Internacional do Recife / Guararapes – Gilberto Freyre",
+        descricao:
+          "O aeroporto mais próximo é o de Recife, localizado a cerca de 20 km de Olinda. De lá, é possível seguir de táxi, aplicativo ou transporte público até o centro histórico de Olinda em aproximadamente 30 minutos.",
       },
     ],
   },

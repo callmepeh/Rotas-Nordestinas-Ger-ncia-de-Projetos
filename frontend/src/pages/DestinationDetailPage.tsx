@@ -5,6 +5,15 @@ import Navbar from "../components/layout/Navbar";
 import "./DestinationDetailPage.css";
 import { FaUserCircle } from "react-icons/fa";
 import InfoCarousel from "../components/destinations/InfoCarousel";
+import { MapGoogle } from "../components/map/MapGoogle";
+import { FaBusSimple, FaPlane, FaShip } from "react-icons/fa6";
+
+interface ComoChegarItem {
+  id: number;
+  tipo: "Terrestre" | "Aéreo" | "Marítimo";
+  titulo: string;
+  descricao: string;
+}
 
 const DestinationDetailPage = () => {
   // O hook useParams() pega os parâmetros da URL.
@@ -25,6 +34,22 @@ const DestinationDetailPage = () => {
       </div>
     );
   }
+
+  // Função para renderizar cada item de "Como Chegar"
+  const renderComoChegarItem = (item: ComoChegarItem) => (
+    <div key={item.id} className="container-to-arrive">
+      <div className="title">
+        <h3>{item.titulo}</h3>
+        <div className="icon-type" >
+          {/* {item.tipo === "Terrestre" && <FaBusSimple size={40} />}
+          {item.tipo === "Aéreo" && <FaPlane size={40} />}
+          {item.tipo === "Marítimo" && <FaShip size={40} />} */}
+          <span>{item.tipo}</span>
+        </div>
+      </div>
+      <p>{item.descricao}</p>
+    </div>
+  );
 
   // Se encontrar, exibe as informações
   return (
@@ -83,6 +108,19 @@ const DestinationDetailPage = () => {
             }))}
           /> */}
           </div>
+
+          <div className="localization-grid">
+            <section className="map-section">
+              <h2>Destino</h2>
+              <MapGoogle city={destino.cidade} state={destino.estado} />
+            </section>
+
+            <section className="to-arrive">
+              <h2>Como Chegar</h2>
+              {destino.comoChegar.map(renderComoChegarItem)}
+            </section>
+          </div>
+
         </main>
       </Container>
     </div>

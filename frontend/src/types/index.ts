@@ -34,6 +34,12 @@ export interface Destino {
   imagemCapa: string;
   descricao: string;
   pontosTuristicos: PontoTuristico[];
+  comoChegar: {
+    id: number;
+    tipo: "Terrestre" | "Aéreo" | "Marítimo";
+    titulo: string;
+    descricao: string;
+  }[];
   // Podemos adicionar outros campos que vimos no design depois
   // atividadesSugeridas: any[];
   // dicasLocais: any[];
