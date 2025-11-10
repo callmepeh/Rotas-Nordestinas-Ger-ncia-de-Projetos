@@ -15,9 +15,14 @@ app.use("/auth", authRoutes);
 const cidadesRoutes = require("./routes/cidadesRoutes.js");
 app.use("/cidades", cidadesRoutes);
 
-const favoritesRoutes = require("./routes/favoritesRoutes");
+const favoritesRoutes = require("./routes/favoritesRoutes.js");
 app.use("/favoritos", favoritesRoutes);
 
+const pontosRoutes = require("./routes/pontosTuristicosRoutes.js");
+app.use("/pontos", pontosRoutes);
+
+const atividadesRoutes = require("./routes/atividadesRoutes.js");
+app.use("/atividades", atividadesRoutes);
 
 // Start
 app.listen(PORT, () => {
