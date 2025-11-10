@@ -24,6 +24,12 @@ app.use("/pontos", pontosRoutes);
 const atividadesRoutes = require("./routes/atividadesRoutes.js");
 app.use("/atividades", atividadesRoutes);
 
+const comentariosRoutes = require("./routes/comentariosRoutes.js");
+app.use("/comentarios", comentariosRoutes);
+
+const comoChegarRoutes = require("./routes/comoChegarRoutes.js");
+app.use("/como-chegar", comoChegarRoutes);
+
 // Start
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
