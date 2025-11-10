@@ -5,4 +5,4 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE
 );
 
-module.exports = { supabase };
+module.exports = supabase;
