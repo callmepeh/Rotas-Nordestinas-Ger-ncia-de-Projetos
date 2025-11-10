@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const { data, error } = await supabase
         .from("Cidades")              // nome da tabela
-        .select("*")                 
+        .select("*")
         .order("nomeCidade", { ascending: true });  // coluna certa
 
     if (error) {
