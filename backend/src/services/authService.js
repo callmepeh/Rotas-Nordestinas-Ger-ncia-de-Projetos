@@ -3,7 +3,7 @@ const { supabase } = require("../database/supabaseClient.js");
 
 exports.getUserProfile = async (userId) => {
   const { data, error } = await supabase
-    .from("Usuários")
+    .from("Users")
     .select("*")
     .eq("id", userId)
     .single();
