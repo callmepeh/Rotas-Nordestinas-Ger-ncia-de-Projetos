@@ -9,34 +9,37 @@ import Container from "../components/layout/Container";
 import DestinationsCarousel from "../components/destinations/DestinationsCarousel";
 import FeaturesSection from "../components/home/FeaturesSections";
 import ValuesSection from "../components/home/ValuesSection";
-import { DESTINOS } from "../data/database";
-import type { Destino } from "../types";
 import heroImage from "../assets/images/hero.jpg";
 import "./HomePage.css";
 
-// Interface para o objeto de destinos agrupados
-interface GroupedDestinos {
-  [estado: string]: Destino[];
-}
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [destinos, setDestinos] = useState<Destino[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const location = useLocation();
 
   // Efeito para rolar a tela quando vindo de outra página
   useEffect(() => {
-    if (location.state?.scrollTo) {
-      scroller.scrollTo(location.state.scrollTo, {
-        duration: 500,
-        smooth: true,
-        offset: -80,
-      });
+    async function fetchDestinos() {
+      try {
+        const response = await fetch("http://localhost:5000/api/cidades");
+        const data = await response.json();
+        setDestinos(data);
+      } catch (err) {
+        setError("Erro ao carregar os destinos.");
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [location]);
+    fetchDestinos();
+  }, []);
 
   // Lógica de busca e agrupamento dos destinos
   const groupedDestinos = useMemo(() => {
-    const filtered = DESTINOS.filter(
+    const filtered = destinos.filter(
       (destino) =>
         destino.cidade.toLowerCase().includes(searchTerm.toLowerCase()) ||
         destino.estado.toLowerCase().includes(searchTerm.toLowerCase())
@@ -49,8 +52,8 @@ const HomePage = () => {
       }
       acc[estado].push(destino);
       return acc;
-    }, {} as GroupedDestinos);
-  }, [searchTerm]);
+    }, {});
+  }, [searchTerm, destinos]);
 
   return (
     <div>

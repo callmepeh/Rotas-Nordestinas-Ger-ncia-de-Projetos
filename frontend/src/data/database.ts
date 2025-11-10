@@ -1,4 +1,3 @@
-import { type User, type Destino } from "../types";
 
 export const USERS: User[] = [
   {
