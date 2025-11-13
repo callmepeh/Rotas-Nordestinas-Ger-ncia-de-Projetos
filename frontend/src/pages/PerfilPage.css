@@ -1,0 +1,94 @@
+/* src/pages/Perfil.css */
+
+.perfil-page-wrapper {
+  padding: 50px 0; 
+}
+
+.perfil-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+  margin-left: 25px;
+}
+
+.perfil-form {
+  width: 100%;
+}
+
+.form-section {
+  margin-bottom: 40px;
+}
+
+.form-section h3 {
+  font-size: 1.5rem; 
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: flex;
+  gap: 30px; 
+  margin-bottom: 20px;
+}
+
+.form-group {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-empty {
+  flex: 1;
+}
+
+.form-group label {
+  font-size: 0.875rem; 
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #333;
+  text-transform: capitalize;
+}
+
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  border: 1px solid #D0D5DD;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.form-group select {
+  appearance: none;
+  background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23667085' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 1em;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.save-button {
+  background-color: #F79009;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.save-button:hover {
+  background-color: #E88400;
+}

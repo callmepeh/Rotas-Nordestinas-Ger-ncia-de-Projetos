@@ -10,6 +10,7 @@ import RegisterForm from "./components/auth/RegisterForm";
 // 1. IMPORTE O SEU FORMULÁRIO DE COLABORADOR
 import CollaboratorForm from "./components/auth/CollaboratorForm"; // <<< ADICIONE ESTA LINHA (ajuste o caminho se necessário)
 import { useUI } from "./context/UIContext";
+import Perfil from "./pages/PerfilPage";
 
 function App() {
   const { openModal } = useUI();
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/destinos/:id" element={<DestinationDetailPage />} />
         <Route path="/sugerir-rota" element={<SugerirRotaPage />} />
+		<Route path="/perfil" element={<Perfil />} />
       </Routes>
 
       {openModal === "login" && (
