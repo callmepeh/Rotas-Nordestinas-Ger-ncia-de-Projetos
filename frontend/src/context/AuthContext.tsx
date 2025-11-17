@@ -13,17 +13,36 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  // ---------- CADASTRO ----------
+  const register = async (data: any) => {
+    try {
+      const response = await api.post("/auth/register", data);
+      return { success: true, message: response.data.message };
+    } catch (err: any) {
+      return {
+        success: false,
+        message: err.response?.data?.error || "Erro ao cadastrar"
+      };
+    }
+  };
+
+  // ---------- LOGIN ----------
+  const login = async (email: string, senha: string) => {
+    try {
+      const response = await api.post("/auth/login", { email, senha });
+
+      setToken(response.data.token);
+      setUser(response.data.user);
+
+      // salva no localStorage (permite manter login ao recarregar página)
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
   const login = (email: string, senha: string): boolean => {
     const foundUser = USERS.find((u) => u.email === email && u.senha === senha);
