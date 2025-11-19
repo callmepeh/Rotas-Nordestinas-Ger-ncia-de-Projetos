@@ -8,13 +8,13 @@ module.exports = async function (req, res, next) {
     return res.status(401).json({ error: "Token não fornecido." });
   }
 
-  const { data, error } = await supabase.auth.getUser(token);
+  const { data: { user }, error } = await supabase.auth.getUser(token);
 
-  if (error || !data?.user) {
+  if (error || !user) {
     return res.status(401).json({ error: "Token inválido ou expirado." });
   }
 
-  req.user = data.user;
+  req.user = user;
 
   next();
 };

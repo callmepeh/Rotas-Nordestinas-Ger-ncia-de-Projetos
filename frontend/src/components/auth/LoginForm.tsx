@@ -1,42 +1,58 @@
 import React, { useState } from "react";
-// Assumindo que useAuth e useUI estão disponíveis no seu ambiente
-// import { useAuth } from "../../context/AuthContext";
-// import { useUI } from "../../context/UIContext";
-
-// NOTA: O objeto 'colors' foi removido para usar as variáveis CSS globais
+import api from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
+import { useUI } from "../../context/UIContext";
 
 const LoginForm = () => {
-  // Funções de Contexto simuladas para rodar o código fora do seu ambiente
-  const login = (email: string, password: string) => {
-    console.log("Tentativa de login");
-    return true;
-  };
-  const closeModal = () => console.log("Fechando modal...");
+  const { login: loginContext } = useAuth();
+  const { closeModal } = useUI();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Estados para controle de hover dos botões
   const [isPrimaryHovered, setIsPrimaryHovered] = useState(false);
   const [isGoogleHovered, setIsGoogleHovered] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(email, password);
-    if (success) {
-      console.log("Login realizado com sucesso!");
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const response = await api.post("/auth/login", {
+        email,
+        senha: password,
+      });
+
+      console.log("Login bem-sucedido:", response.data);
+
+      const { token, user } = response.data;
+
+      // salvar token
+      localStorage.setItem("token", token);
+
+      // atualizar contexto global
+      loginContext(user);
+
       closeModal();
-    } else {
-      console.error("Email ou senha incorretos.");
+    } catch (error: any) {
+      const msg =
+        error.response?.data?.error || "Erro ao fazer login. Tente novamente.";
+      setErrorMsg(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // --- Estilos Comuns e Dinâmicos ---
+  // --- Estilos (EXATAMENTE IGUAIS AOS SEUS) ---
 
   const commonInputStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 15px",
-    border: `1px solid var(--cor-primaria)`, // Usando variável CSS
+    border: `1px solid var(--cor-primaria)`,
     borderRadius: "25px",
     boxSizing: "border-box",
     fontSize: "16px",
@@ -48,10 +64,10 @@ const LoginForm = () => {
   const primaryButtonStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 10px",
-    background: "var(--cor-fundo)", // Usando variável CSS
-    border: `1px solid var(--cor-primaria)`, // Usando variável CSS
+    background: "var(--cor-fundo)",
+    border: `1px solid var(--cor-primaria)`,
     borderRadius: "25px",
-    color: "var(--cor-primaria)", // Usando variável CSS
+    color: "var(--cor-primaria)",
     fontSize: "16px",
     fontWeight: "bold",
     cursor: "pointer",
@@ -64,29 +80,25 @@ const LoginForm = () => {
     ...primaryButtonStyle,
     background: isGoogleHovered
       ? "var(--cor-cinza-principal)"
-      : "var(--cor-fundo)", // Usando variável CSS
+      : "var(--cor-fundo)",
     color: "#333",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    border: `1px solid ${
-      isGoogleHovered
-        ? "var(--cor-cinza-secundario)"
-        : "var(--cor-cinza-secundario)"
-    }`, // Usando variável CSS
+    border: `1px solid var(--cor-cinza-secundario)`,
     marginBottom: "30px",
     fontWeight: "normal",
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
   };
 
-  // Estilo do botão de Login (o principal)
   const loginButtonStyle: React.CSSProperties = {
     ...primaryButtonStyle,
-    background: isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)", // Usando variável CSS
-    color: "var(--cor-fundo)", // Usando variável CSS
+    background: isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)",
+    color: "var(--cor-fundo)",
     border: `1px solid ${
       isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)"
-    }`, // Usando variável CSS
+    }`,
+    opacity: loading ? 0.7 : 1,
   };
 
   return (
@@ -96,10 +108,9 @@ const LoginForm = () => {
         position: "relative",
         maxWidth: "400px",
         margin: "auto",
-        backgroundColor: "var(--cor-fundo)", // Usando variável CSS
+        backgroundColor: "var(--cor-fundo)",
       }}
     >
-      {/* Título */}
       <h2
         style={{
           textAlign: "center",
@@ -112,7 +123,12 @@ const LoginForm = () => {
         rotas nordestinas
       </h2>
 
-      {/* Botão de Login com Google - (com hover e o ícone simples) */}
+      {errorMsg && (
+        <p style={{ color: "red", textAlign: "center", marginBottom: "15px" }}>
+          {errorMsg}
+        </p>
+      )}
+
       <button
         style={googleButtonStyle}
         onMouseEnter={() => setIsGoogleHovered(true)}
@@ -123,7 +139,7 @@ const LoginForm = () => {
         onTouchEnd={() => setIsGoogleHovered(false)}
       >
         <img
-          src="..\src\assets\icons\google.svg"
+          src="../src/assets/icons/google.svg"
           alt="Google Logo"
           style={{ width: "20px", height: "20px", marginRight: "10px" }}
         />
@@ -131,7 +147,6 @@ const LoginForm = () => {
       </button>
 
       <form onSubmit={handleSubmit}>
-        {/* Campo de Email */}
         <div style={{ marginBottom: "20px" }}>
           <input
             type="email"
@@ -143,7 +158,6 @@ const LoginForm = () => {
           />
         </div>
 
-        {/* Campo de Senha */}
         <div style={{ marginBottom: "20px", position: "relative" }}>
           <input
             type="password"
@@ -155,10 +169,10 @@ const LoginForm = () => {
           />
         </div>
 
-        {/* Botão de Login (com hover) */}
         <button
           type="submit"
           style={loginButtonStyle}
+          disabled={loading}
           onMouseEnter={() => setIsPrimaryHovered(true)}
           onMouseLeave={() => setIsPrimaryHovered(false)}
           onMouseDown={() => setIsPrimaryHovered(true)}
@@ -166,7 +180,7 @@ const LoginForm = () => {
           onTouchStart={() => setIsPrimaryHovered(true)}
           onTouchEnd={() => setIsPrimaryHovered(false)}
         >
-          Login
+          {loading ? "Entrando..." : "Login"}
         </button>
       </form>
     </div>

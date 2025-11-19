@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useUI } from "../../context/UIContext"; // <<< Usando o contexto real
+import { useAuth } from "../../context/AuthContext"; // <-- precisa do user + token
 
 const CollaboratorForm = () => {
-  // Usando as funções reais do seu contexto UI
   const { closeModal } = useUI();
+  const { user, token } = useAuth(); // user.id + token JWT
 
   // Lógica de submissão (simulada por enquanto)
   const registerCollaborator = (data: any) => {

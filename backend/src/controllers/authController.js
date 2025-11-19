@@ -1,79 +1,100 @@
-// controllers/authController.js
-const { supabase } = require("../database/supabaseClient.js");
+const supabase = require("../database/supabaseClient.js");
 
 // POST /auth/register
 exports.register = async (req, res) => {
   try {
-    const { email, senha, nomeCompleto, profissao, telefone, cpf, nomeCidade, siglaEstado } = req.body;
+    const { nomeCompleto, email, senha } = req.body;
 
-    if (!email || !senha) {
-      return res.status(400).json({ error: "Email e senha são obrigatórios." });
+    if (!nomeCompleto || !email || !senha) {
+      return res.status(400).json({ error: "Nome, email e senha são obrigatórios." });
     }
 
-    // 1. Criar usuário no Supabase Auth
+    console.log("📩 Recebido no backend:", req.body);
+    console.log("🟦 Criando usuário no Supabase Auth...");
+
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
-      password: senha
+      password: senha,
+      options: {
+        data: { nomeCompleto },
+        emailRedirectTo: "http://localhost:3000/login",
+      },
     });
 
     if (authError) {
+      console.log("❌ Erro Supabase Auth:", authError);
       return res.status(400).json({ error: authError.message });
     }
 
-    const userId = authData.user.id;
+    console.log("🟩 Usuário criado no Auth:", authData);
 
-    // 2. Criar registro na tabela Usuários com o mesmo ID
+    const userId = authData.user?.id;
+
+    if (!userId) {
+      return res.status(400).json({
+        error: "Erro ao obter o ID do usuário. Verifique o Supabase.",
+      });
+    }
+
+    console.log("🟦 Inserindo usuário na tabela Users...");
+
     const { error: insertError } = await supabase
       .from("Users")
       .insert([
         {
           id: userId,
           email,
-          nomeCompleto,
-          telefone,
-          profissao,
-          cpf: cpf,
-          nomeCidade,
-          siglaEstado
-        }
+          nomeCompleto,   // agora o nome da coluna está correto
+          funcao: "usuario",
+        },
       ]);
 
     if (insertError) {
+      console.log("❌ Erro ao inserir no Users:", insertError);
       return res.status(400).json({ error: insertError.message });
     }
 
     return res.status(201).json({
-      message: "Usuário cadastrado com sucesso!"
+      message: "Cadastro criado! Verifique seu e-mail para confirmar o acesso.",
     });
-    
+
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Erro interno no servidor." });
+    console.log("❌ ERRO GERAL NO BACKEND:", err);
+    return res.status(500).json({ error: "Erro interno no servidor." });
   }
 };
+
 
 // POST /auth/login
 exports.login = async (req, res) => {
   try {
     const { email, senha } = req.body;
 
-    const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-      email,
-      password: senha
-    });
+    console.log("📩 Dados recebidos no login:", req.body);
+
+    const { data: loginData, error: loginError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password: senha,
+      });
+
+    console.log("🔎 loginData:", loginData);
+    console.log("⚠️ loginError:", loginError);
 
     if (loginError) {
-      return res.status(401).json({ error: "Credenciais inválidas." });
+      return res.status(401).json({ error: loginError.message });
     }
 
     const userId = loginData.user.id;
 
-    // Buscar informações completas
-    const { data: userProfile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("Users")
       .select("*")
       .eq("id", userId)
       .single();
+
+    console.log("📌 Dados do usuário:", profile);
+    console.log("⚠️ profileError:", profileError);
 
     if (profileError) {
       return res.status(400).json({ error: profileError.message });
@@ -82,28 +103,68 @@ exports.login = async (req, res) => {
     return res.json({
       message: "Login realizado com sucesso.",
       token: loginData.session.access_token,
-      user: {
-        ...userProfile
-      }
+      user: profile,
     });
-
   } catch (err) {
-    res.status(500).json({ error: "Erro interno no servidor." });
+    console.log("❌ Erro geral no login:", err);
+    return res.status(500).json({ error: "Erro interno no servidor." });
   }
 };
+
 
 // GET /auth/me
 exports.me = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const profile = await authService.getUserProfile(userId);
+    const { data: user, error } = await supabase
+      .from("Users")
+      .select("*")
+      .eq("id", userId)
+      .single();
+
+    if (error) {
+      return res.status(404).json({ error: error.message });
+    }
+
+    return res.json({ user });
+  } catch (err) {
+    return res.status(500).json({ error: "Erro ao carregar perfil." });
+  }
+};
+
+
+
+// PUT /auth/update/:id
+exports.updateProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (req.user.id !== id) {
+      return res.status(403).json({ error: "Não autorizado." });
+    }
+
+    const updates = req.body;
+
+    const { data, error } = await supabase
+      .from("Users")
+      .update({
+        ...updates,
+        funcao: "colaborador", // vira colaborador
+      })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
 
     return res.json({
-      message: "Dados do usuário logado.",
-      user: profile
+      message: "Perfil atualizado com sucesso!",
+      user: data,
     });
   } catch (err) {
-    res.status(500).json({ error: "Erro ao buscar informações do usuário." });
+    return res.status(500).json({ error: "Erro ao atualizar perfil." });
   }
 };

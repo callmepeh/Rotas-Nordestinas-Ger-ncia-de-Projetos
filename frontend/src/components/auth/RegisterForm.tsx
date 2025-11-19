@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-// Assumindo que useAuth e useUI estão disponíveis no seu ambiente
-// import { useAuth } from "../../context/AuthContext";
-// import { useUI } from "../../context/UIContext";
-
-// NOTA: O objeto 'colors' foi removido para usar as variáveis CSS globais
+import { useAuth } from "../../context/AuthContext";
+import { useUI } from "../../context/UIContext";
+import api from "../../services/api";
 
 const RegisterForm = () => {
-  // Funções de Contexto simuladas para rodar o código fora do seu ambiente
-  const register = (data: any) => ({
-    success: true,
-    message: "Cadastro realizado com sucesso!",
-  });
   const closeModal = () => console.log("Fechando modal...");
   const showLoginModal = () => console.log("Abrindo modal de Login...");
 
@@ -19,13 +12,9 @@ const RegisterForm = () => {
     email: "",
     senha: "",
     confirmarSenha: "",
-    dataNascimento: "",
-    estado: "",
-    cidade: "",
-    telefone: "",
   });
 
-  // Estados para controle de hover dos botões
+  const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [isPrimaryHovered, setIsPrimaryHovered] = useState(false);
   const [isGoogleHovered, setIsGoogleHovered] = useState(false);
 
@@ -34,133 +23,114 @@ const RegisterForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (formData.senha !== formData.confirmarSenha) {
       console.error("As senhas não coincidem!");
       return;
     }
 
-    const { confirmarSenha, ...registerData } = formData;
-    const result = register(registerData);
+    try {
+      const response = await api.post("/auth/register", {
+        nomeCompleto: formData.nome,
+        email: formData.email,
+        senha: formData.senha,
+      });
 
-    if (result.success) {
-      console.log(result.message);
-      closeModal();
-      showLoginModal();
-    } else {
-      console.error(result.message);
+      console.log("Cadastro:", response.data);
+
+      // mostra popup pedindo confirmação de email
+      setShowVerificationPopup(true);
+
+    } catch (err: any) {
+      console.error("Erro ao cadastrar:", err.response?.data || err.message);
     }
-  };
 
-  // --- Estilos Comuns e Dinâmicos ---
+  };
 
   const commonInputStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 15px",
-    border: `1px solid var(--cor-primaria)`, // Usando variável CSS
+    border: `1px solid var(--cor-primaria)`,
     borderRadius: "25px",
-    boxSizing: "border-box",
     fontSize: "16px",
     outline: "none",
-    color: "#333",
-    transition: "border-color 0.2s",
   };
 
   const primaryButtonStyle: React.CSSProperties = {
     width: "100%",
     padding: "16px 10px",
-    background: isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)", // Usando variáveis CSS
-    border: `1px solid ${
-      isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)"
-    }`, // Usando variáveis CSS
+    background: isPrimaryHovered ? "var(--cor-hover)" : "var(--cor-primaria)",
+    border: "none",
     borderRadius: "25px",
-    color: "var(--cor-fundo)", // Usando variável CSS
+    color: "white",
     fontSize: "16px",
     fontWeight: "bold",
     cursor: "pointer",
     marginTop: "20px",
-    transition: "background 0.2s, border-color 0.2s",
-    userSelect: "none" as const,
-  };
-
-  const googleButtonStyle: React.CSSProperties = {
-    ...primaryButtonStyle,
-    background: isGoogleHovered
-      ? "var(--cor-cinza-principal)"
-      : "var(--cor-fundo)", // Usando variáveis CSS
-    color: "#333",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border: `1px solid ${
-      isGoogleHovered
-        ? "var(--cor-cinza-secundario)"
-        : "var(--cor-cinza-secundario)"
-    }`, // Usando variáveis CSS
-    marginBottom: "30px",
-    fontWeight: "normal",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    transition: "0.2s",
   };
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        position: "relative",
-        maxWidth: "400px",
-        margin: "auto",
-        backgroundColor: "var(--cor-fundo)", // Usando variável CSS
-      }}
-    >
-      {/* Botão de Fechar (X) */}
-      <button
-        onClick={closeModal}
-        style={{
-          position: "absolute",
-          top: "0px",
-          right: "0px",
-          background: "none",
-          border: "none",
-          fontSize: "24px",
-          cursor: "pointer",
-        }}
-      ></button>
+    <div style={{ padding: "20px", maxWidth: "400px", margin: "auto" }}>
+      {/* POPUP DE VERIFICAÇÃO */}
+      {showVerificationPopup && (
+        <div style={{
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: "100vw",
+          height: "100vh",
+          background: "rgba(0,0,0,0.45)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
+        }}>
+          <div style={{
+            background: "white",
+            padding: "25px",
+            borderRadius: "12px",
+            width: "90%",
+            maxWidth: "350px",
+            textAlign: "center",
+            boxShadow: "0 4px 25px rgba(0,0,0,0.25)",
+          }}>
 
-      {/* Título */}
-      <h2
-        style={{
-          textAlign: "center",
-          marginBottom: "30px",
-          fontSize: "20px",
-          lineHeight: "1.2",
-        }}
-      >
+            <h3 style={{ marginBottom: "10px" }}>Verifique seu e-mail</h3>
+            <p>Enviamos um link de confirmação para:</p>
+            <strong>{formData.email}</strong>
+            <p style={{ marginTop: "10px" }}>
+              Após confirmar, volte e faça login.
+            </p>
+
+            <button
+              onClick={() => setShowVerificationPopup(false)}
+              style={{
+                marginTop: "20px",
+                background: "var(--cor-primaria)",
+                color: "white",
+                border: "none",
+                padding: "12px 20px",
+                borderRadius: "25px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+
+      
+      <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
         Bem-vindo a <br />
         rotas nordestinas
       </h2>
 
-      {/* Botão de Login com Google (com hover e o ícone simples) */}
-      <button
-        style={googleButtonStyle}
-        onMouseEnter={() => setIsGoogleHovered(true)}
-        onMouseLeave={() => setIsGoogleHovered(false)}
-        // Simulação de clique: um pouco de feedback visual (opcional)
-        onMouseDown={() => setIsGoogleHovered(true)}
-        onMouseUp={() => setIsGoogleHovered(false)}
-        onTouchStart={() => setIsGoogleHovered(true)}
-        onTouchEnd={() => setIsGoogleHovered(false)}
-      >
-        {/* Ícone do Google usando o caminho local */}
-        <img
-          src="..\src\assets\icons\google.svg"
-          style={{ width: "20px", height: "20px", marginRight: "10px" }}
-        />
-        Fazer login com o google
-      </button>
-
       <form onSubmit={handleSubmit}>
-        {/* Campo Nome */}
         <div style={{ marginBottom: "20px" }}>
           <input
             name="nome"
@@ -172,7 +142,6 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* Campo Email */}
         <div style={{ marginBottom: "20px" }}>
           <input
             name="email"
@@ -184,11 +153,10 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* Campo Senha */}
-        <div style={{ marginBottom: "20px", position: "relative" }}>
+        <div style={{ marginBottom: "20px" }}>
           <input
             name="senha"
-            type="password" // Tipo fixo como password
+            type="password"
             placeholder="Senha"
             onChange={handleChange}
             style={commonInputStyle}
@@ -196,11 +164,10 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* Campo Confirmar Senha */}
-        <div style={{ marginBottom: "20px", position: "relative" }}>
+        <div style={{ marginBottom: "20px" }}>
           <input
             name="confirmarSenha"
-            type="password" // Tipo fixo como password
+            type="password"
             placeholder="Confirmar senha"
             onChange={handleChange}
             style={commonInputStyle}
@@ -208,17 +175,11 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* Botão Criar Conta (com hover) */}
         <button
           type="submit"
           style={primaryButtonStyle}
           onMouseEnter={() => setIsPrimaryHovered(true)}
           onMouseLeave={() => setIsPrimaryHovered(false)}
-          // Simulação de clique
-          onMouseDown={() => setIsPrimaryHovered(true)}
-          onMouseUp={() => setIsPrimaryHovered(false)}
-          onTouchStart={() => setIsPrimaryHovered(true)}
-          onTouchEnd={() => setIsPrimaryHovered(false)}
         >
           Criar conta
         </button>
