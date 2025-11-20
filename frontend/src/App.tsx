@@ -21,7 +21,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/destinos/:id" element={<DestinationDetailPage />} />
         <Route path="/sugerir-rota" element={<SugerirRotaPage />} />
-		<Route path="/perfil" element={<Perfil />} />
+        <Route path="/perfil" element={<Perfil />} />
       </Routes>
 
       {openModal === "login" && (

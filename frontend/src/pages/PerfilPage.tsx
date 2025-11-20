@@ -1,5 +1,3 @@
-// src/pages/PerfilPage.tsx
-
 import React, { useState } from "react";
 import NavBar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
