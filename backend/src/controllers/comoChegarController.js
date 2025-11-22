@@ -5,9 +5,9 @@ exports.listarPorCidade = async (req, res) => {
     const { cidadeId } = req.params;
 
     const { data, error } = await supabase
-      .from("Como Chegar")
+      .from("como_chegar")
       .select("*")
-      .eq("cidadeId", cidadeId);
+      .eq("cidade_id", cidadeId);
 
     if (error) return res.status(400).json({ error: error.message });
 

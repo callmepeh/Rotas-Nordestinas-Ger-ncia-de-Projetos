@@ -1,12 +1,12 @@
 const supabase = require("../database/supabaseClient.js");
 
-// Lista todos os pontos turísticos de uma cidade
+// Lista todas as dicas de uma cidade
 exports.listarPorCidade = async (req, res) => {
   try {
     const { cidadeId } = req.params;
 
     const { data, error } = await supabase
-      .from("pontos_turisticos")
+      .from("dicas")
       .select("*")
       .eq("cidade_id", cidadeId);
 
@@ -14,7 +14,7 @@ exports.listarPorCidade = async (req, res) => {
 
     return res.json(data);
   } catch (err) {
-    console.error("Erro ao listar pontos turísticos:", err);
+    console.error("Erro ao listar dicas:", err);
     res.status(500).json({ error: "Erro interno no servidor." });
   }
 };

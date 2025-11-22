@@ -24,6 +24,9 @@ app.use("/pontos", pontosRoutes);
 const atividadesRoutes = require("./routes/atividadesRoutes.js");
 app.use("/atividades", atividadesRoutes);
 
+const dicasRoutes = require("./routes/dicasRoutes.js");
+app.use("/dicas", dicasRoutes);
+
 const comentariosRoutes = require("./routes/comentariosRoutes.js");
 app.use("/comentarios", comentariosRoutes);
 

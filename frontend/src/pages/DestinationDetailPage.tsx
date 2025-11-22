@@ -6,12 +6,11 @@ import "./DestinationDetailPage.css";
 import Footer from "../components/layout/Footer";
 import { FaUserCircle } from "react-icons/fa";
 import InfoCarousel from "../components/destinations/InfoCarousel";
-import { MapGoogle } from "../components/map/MapGoogle";
 import { api } from "../services/api";
 
 interface Destino { 
   id: string;
-  nomeCidade: string;
+  nome: string;
   url_imagem: string;
   descricao?: string;
   estado?: {
@@ -20,6 +19,7 @@ interface Destino {
   };
   usuario?: {
     id: string;
+<<<<<<< HEAD
     nomeCompleto: string;
   };
 }
@@ -31,11 +31,27 @@ interface CarouselItem {
   url_imagem: string;
 }
 
+=======
+    nome: string;
+  };
+}
+
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
 interface ComoChegarItem {
   id: number;
   tipo: "Terrestre" | "Aéreo" | "Marítimo";
   titulo: string;
   descricao: string;
+<<<<<<< HEAD
+=======
+}
+
+interface CarouselItem {
+  id: string;
+  titulo: string;
+  descricao: string;
+  url_imagem: string;
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
 }
 
 const DestinationDetailPage = () => {
@@ -46,9 +62,15 @@ const DestinationDetailPage = () => {
   const [pontosTuristicos, setPontosTuristicos] = useState<CarouselItem[]>([]);
   const [atividades, setAtividades] = useState<CarouselItem[]>([]);
   const [dicas, setDicas] = useState<CarouselItem[]>([]);
+<<<<<<< HEAD
 
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
 
+=======
+  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
 
   // Busca o destino pelo ID vindo da URL
   useEffect(() => {
@@ -56,29 +78,48 @@ const DestinationDetailPage = () => {
       try {
         //Busca dados do destino
         const response = await api.get(`/cidades/${id}`);
+<<<<<<< HEAD
         const destinoData = response.data;
         // console.log("Destino carregado:", response.data);
         setDestino(response.data);
         
+=======
+        // console.log("Destino carregado:", response.data);
+        setDestino(response.data);
+
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de como chegar
         const comoChegarResponse = await api.get(`/como-chegar/${id}`);
         // console.log("Como Chegar carregado:", comoChegarResponse.data);
         setComoChegar(comoChegarResponse.data);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de pontos turísticos
         const pontosTuristicosResponse = await api.get(`/pontos/${id}`);
         // console.log("Pontos Turísticos carregados:", pontosTuristicosResponse.data);
         setPontosTuristicos(pontosTuristicosResponse.data);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de atividades
         const atividadesResponse = await api.get(`/atividades/${id}`);
         // console.log("Atividades carregadas:", atividadesResponse.data);
         setAtividades(atividadesResponse.data);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de dicas
         const dicasResponse = await api.get(`/dicas/${id}`);
         // console.log("Dicas carregadas:", dicasResponse.data);
         setDicas(dicasResponse.data);
+<<<<<<< HEAD
         
         await fetchComments();
 
@@ -86,6 +127,8 @@ const DestinationDetailPage = () => {
       if (destinoData.latitude && destinoData.longitude) {
         setCoordinates([destinoData.latitude, destinoData.longitude]);
       }
+=======
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
 
       } catch (err) {
         console.error("Erro ao buscar destino:", err);
@@ -96,11 +139,33 @@ const DestinationDetailPage = () => {
     }
 
     if (id) fetchDestino();
+<<<<<<< HEAD
     
   }, [id, fetchComments]);
   
   // Se o destino não for encontrado, exibe uma mensagem
   if (!destino) {
+=======
+  }, [id]);
+
+   // Função para renderizar cada item de "Como Chegar"
+  const renderComoChegarItem = (item: ComoChegarItem) => (
+    <div key={item.id} className="container-to-arrive">
+      <div className="title">
+        <h3>{item.titulo}</h3>
+        <div className="icon-type" >
+          {/* {item.tipo === "Terrestre" && <FaBusSimple size={40} />}
+          {item.tipo === "Aéreo" && <FaPlane size={40} />}
+          {item.tipo === "Marítimo" && <FaShip size={40} />} */}
+          <span>{item.tipo}</span>
+        </div>
+      </div>
+      <p>{item.descricao}</p>
+    </div>
+  );
+
+  if (loading)
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
     return (
       <div>
         <Navbar />
@@ -133,9 +198,15 @@ const DestinationDetailPage = () => {
       <Navbar />
       <div
         className="detail-hero"
+<<<<<<< HEAD
         style={{ backgroundImage: `url(${destino.imagemCapa})` }}
       >
         <h1>{destino.cidade}</h1>
+=======
+        style={{ backgroundImage: `url(${destino.url_imagem})` }}
+      >
+        <h1>{destino.nome}</h1>
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
       </div>
 
       <div className="flex_area">
@@ -188,6 +259,7 @@ const DestinationDetailPage = () => {
           <div className="localization-grid">
             <section className="map-section">
               <h2>Destino</h2>
+<<<<<<< HEAD
               {coordinates ? (
                 <LeafletMap 
                   latitude={coordinates[0]} 
@@ -197,6 +269,9 @@ const DestinationDetailPage = () => {
                 ) : (
                   <p>Carregando mapa...</p>
                 )}
+=======
+              {/* <MapGoogle city={destino.cidade} state={destino.estado} /> */}
+>>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
             </section>
 
             <section className="to-arrive">
