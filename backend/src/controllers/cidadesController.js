@@ -1,13 +1,43 @@
 const supabase = require("../database/supabaseClient.js");
 
+exports.listarTodas = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("cidades")
+      .select(
+        `
+        id,
+        nome,
+        url_imagem,
+        descricao,
+        estado_id: estados (
+          nome,
+          sigla
+        )
+      `
+      );
+
+    if (error) {
+      console.error("Erro Supabase:", error.message);
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.json(data);
+  } catch (err) {
+    console.error("Erro interno ao listar cidades:", err);
+    res.status(500).json({ error: "Erro interno no servidor." });
+  }
+};
+
+
 exports.buscarPorNome = async (req, res) => {
   try {
     const nome = req.query.nome;
 
     const { data, error } = await supabase
-      .from("Cidades")
+      .from("cidades")
       .select("*")
-      .ilike("nomeCidade", `%${nome}%`);
+      .ilike("nome", `%${nome}%`);
 
     if (error) return res.status(400).json({ error: error.message });
 
@@ -23,9 +53,9 @@ exports.listarPorEstado = async (req, res) => {
     const { estadoID } = req.params;
 
     const { data, error } = await supabase
-      .from("Cidades")
+      .from("cidades")
       .select("*")
-      .eq("estadoID", estadoID);
+      .eq("estado_id", estadoID);
 
     if (error) return res.status(500).json({ error: error.message });
 
@@ -41,7 +71,7 @@ exports.buscarPorId = async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await supabase
-      .from("Cidades")
+      .from("cidades")
       .select("*")
       .eq("id", id)
       .maybeSingle();

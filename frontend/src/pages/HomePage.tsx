@@ -10,6 +10,7 @@ import DestinationsCarousel from "../components/destinations/DestinationsCarouse
 import FeaturesSection from "../components/home/FeaturesSections";
 import ValuesSection from "../components/home/ValuesSection";
 import heroImage from "../assets/images/hero.jpg";
+import { api } from "../services/api";
 import "./HomePage.css";
 
 

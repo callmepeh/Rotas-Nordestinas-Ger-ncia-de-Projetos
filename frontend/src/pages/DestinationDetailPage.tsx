@@ -6,12 +6,8 @@ import "./DestinationDetailPage.css";
 import Footer from "../components/layout/Footer";
 import { FaUserCircle } from "react-icons/fa";
 import InfoCarousel from "../components/destinations/InfoCarousel";
+import { MapGoogle } from "../components/map/MapGoogle";
 import { api } from "../services/api";
-import { LeafletMap } from "../components/map/MapLeaflet";
-import 'leaflet/dist/leaflet.css';
-import { useAuth } from "../context/AuthContext";
-import { FaRegEdit } from "react-icons/fa";
-import { GoHeart, GoHeartFill } from "react-icons/go";
 
 interface Destino { 
   id: string;
