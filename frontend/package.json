@@ -13,14 +13,18 @@
     "@googlemaps/js-api-loader": "^2.0.2",
     "@react-google-maps/api": "^2.20.7",
     "@vis.gl/react-google-maps": "^1.7.1",
+    "axios": "^1.13.2",
+    "leaflet": "^1.9.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
+    "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.9.3",
     "react-scroll": "^1.9.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^24.10.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",

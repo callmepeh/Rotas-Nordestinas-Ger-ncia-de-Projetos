@@ -7,6 +7,8 @@ import Footer from "../components/layout/Footer";
 import { FaUserCircle } from "react-icons/fa";
 import InfoCarousel from "../components/destinations/InfoCarousel";
 import { api } from "../services/api";
+import { LeafletMap } from "../components/map/MapLeaflet";
+import 'leaflet/dist/leaflet.css';
 
 interface Destino { 
   id: string;
@@ -54,7 +56,7 @@ interface CarouselItem {
 >>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
 }
 
-const DestinationDetailPage = () => {
+const DestinationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [destino, setDestino] = useState<Destino | null>(null);
 
@@ -62,11 +64,6 @@ const DestinationDetailPage = () => {
   const [pontosTuristicos, setPontosTuristicos] = useState<CarouselItem[]>([]);
   const [atividades, setAtividades] = useState<CarouselItem[]>([]);
   const [dicas, setDicas] = useState<CarouselItem[]>([]);
-<<<<<<< HEAD
-
-  const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
-
-=======
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,57 +75,28 @@ const DestinationDetailPage = () => {
       try {
         //Busca dados do destino
         const response = await api.get(`/cidades/${id}`);
-<<<<<<< HEAD
-        const destinoData = response.data;
-        // console.log("Destino carregado:", response.data);
-        setDestino(response.data);
-        
-=======
         // console.log("Destino carregado:", response.data);
         setDestino(response.data);
 
->>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de como chegar
         const comoChegarResponse = await api.get(`/como-chegar/${id}`);
         // console.log("Como Chegar carregado:", comoChegarResponse.data);
         setComoChegar(comoChegarResponse.data);
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de pontos turísticos
         const pontosTuristicosResponse = await api.get(`/pontos/${id}`);
         // console.log("Pontos Turísticos carregados:", pontosTuristicosResponse.data);
         setPontosTuristicos(pontosTuristicosResponse.data);
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de atividades
         const atividadesResponse = await api.get(`/atividades/${id}`);
         // console.log("Atividades carregadas:", atividadesResponse.data);
         setAtividades(atividadesResponse.data);
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
         //Busca dados de dicas
         const dicasResponse = await api.get(`/dicas/${id}`);
         // console.log("Dicas carregadas:", dicasResponse.data);
         setDicas(dicasResponse.data);
-<<<<<<< HEAD
-        
-        await fetchComments();
-
-       // Define coordenadas vindo do backend
-      if (destinoData.latitude && destinoData.longitude) {
-        setCoordinates([destinoData.latitude, destinoData.longitude]);
-      }
-=======
->>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
 
       } catch (err) {
         console.error("Erro ao buscar destino:", err);
@@ -147,7 +115,21 @@ const DestinationDetailPage = () => {
   if (!destino) {
 =======
   }, [id]);
-
+  
+  const fetchCoordinates = async (cidade: string, estado: string) => {
+    try {
+      const query = `${cidade}, ${estado}, Brazil`;
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        setCoordinates([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
+      } else {
+        console.warn("A API de geocodificação não encontrou o local:", query);
+      }
+    } catch (error) {
+      console.error("Falha ao buscar coordenadas na API de geocodificação:", error);
+    }
+  };
    // Função para renderizar cada item de "Como Chegar"
   const renderComoChegarItem = (item: ComoChegarItem) => (
     <div key={item.id} className="container-to-arrive">
@@ -259,19 +241,7 @@ const DestinationDetailPage = () => {
           <div className="localization-grid">
             <section className="map-section">
               <h2>Destino</h2>
-<<<<<<< HEAD
-              {coordinates ? (
-                <LeafletMap 
-                  latitude={coordinates[0]} 
-                  longitude={coordinates[1]}
-                  popupText={destino?.nomeCidade}
-                />
-                ) : (
-                  <p>Carregando mapa...</p>
-                )}
-=======
               {/* <MapGoogle city={destino.cidade} state={destino.estado} /> */}
->>>>>>> be45f56 (feat(destinations): Implements dynamic sections on the details page.)
             </section>
 
             <section className="to-arrive">

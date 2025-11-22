@@ -72,9 +72,20 @@ exports.buscarPorId = async (req, res) => {
 
     const { data, error } = await supabase
       .from("cidades")
-      .select("*")
+      .select(
+        `
+        id,
+        nome,
+        url_imagem,
+        descricao,
+        estado:estados (
+          nome,
+          sigla
+        )
+      `
+      )
       .eq("id", id)
-      .maybeSingle();
+      .single();
 
     if (error) {
       console.error("Supabase error:", error);
