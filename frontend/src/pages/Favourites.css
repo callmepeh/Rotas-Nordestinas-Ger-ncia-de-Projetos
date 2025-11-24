@@ -1,0 +1,81 @@
+.favourites-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+footer {
+  margin-top: auto;
+}
+
+
+/* Garante que o footer desça quando o conteúdo for pequeno */
+.footer-bottom-fixed {
+  margin-top: auto;
+}
+
+/* Estilizações da página */
+.fav-container {
+  padding: 20px;
+}
+
+.fav-title {
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.fav-loading,
+.fav-empty {
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.fav-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.fav-card {
+  background-size: cover;
+  background-position: center;
+  height: 230px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.fav-info {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  color: white;
+  text-shadow: 0 0 5px black;
+}
+
+.fav-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.fav-city {
+  font-size: 15px;
+}
+
+.fav-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4444;
+  border: none;
+  padding: 8px 14px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.fav-remove:hover {
+  background: #cc0000;
+}
