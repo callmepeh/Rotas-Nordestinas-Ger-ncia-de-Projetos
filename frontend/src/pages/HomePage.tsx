@@ -23,7 +23,7 @@ interface Destino {
   nomeCidade: string;
   urlImagem: string;
   descricao?: string;
-  estado?: Estado;
+  estados?: Estado;
 }
 
 const HomePage = () => {
@@ -53,7 +53,7 @@ const HomePage = () => {
   // Lógica de busca e agrupamento dos destinos
   const groupedDestinos = useMemo(() => {
     return destinos.reduce((acc: Record<string, Destino[]>, destino) => {
-      const estado = destino.estado?.nome || "Desconhecido";
+      const estado = destino.estados?.nome || "Desconhecido";
       if (!acc[estado]) acc[estado] = [];
       acc[estado].push(destino);
       return acc;
