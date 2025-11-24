@@ -1,3 +1,6 @@
+const dns = require('node:dns');
+dns.setDefaultResultOrder('ipv4first');
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -7,6 +10,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+console.log("URL:", process.env.SUPABASE_URL);
+console.log("ROLE KEY:", process.env.SUPABASE_SERVICE_ROLE ? "OK" : "Vazia");
 
 // Rotas
 const authRoutes = require("./routes/authRoutes.js");

@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
   try {
     const { email, senha } = req.body;
 
-    console.log("📩 Dados recebidos no login:", req.body);
+    console.log("Dados recebidos no login:", req.body);
 
     const { data: loginData, error: loginError } =
       await supabase.auth.signInWithPassword({
@@ -78,13 +78,12 @@ exports.login = async (req, res) => {
         password: senha,
       });
 
-    console.log("🔎 loginData:", loginData);
-    console.log("⚠️ loginError:", loginError);
+    console.log("loginData:", loginData);
+    console.log("loginError:", loginError);
 
-    if (loginError) {
-      return res.status(401).json({ error: loginError.message });
-    }
-
+    if (loginError || !loginData?.user) {
+  return res.status(401).json({ error: "Credenciais inválidas." });
+}
     const userId = loginData.user.id;
 
     const { data: profile, error: profileError } = await supabase
@@ -93,8 +92,8 @@ exports.login = async (req, res) => {
       .eq("id", userId)
       .single();
 
-    console.log("📌 Dados do usuário:", profile);
-    console.log("⚠️ profileError:", profileError);
+    console.log("Dados do usuário:", profile);
+    console.log("profileError:", profileError);
 
     if (profileError) {
       return res.status(400).json({ error: profileError.message });
@@ -106,7 +105,7 @@ exports.login = async (req, res) => {
       user: profile,
     });
   } catch (err) {
-    console.log("❌ Erro geral no login:", err);
+    console.log("Erro geral no login:", err);
     return res.status(500).json({ error: "Erro interno no servidor." });
   }
 };

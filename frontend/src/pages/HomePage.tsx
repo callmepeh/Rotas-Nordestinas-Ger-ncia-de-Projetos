@@ -13,6 +13,18 @@ import heroImage from "../assets/images/hero.jpg";
 import { api } from "../services/api";
 import "./HomePage.css";
 
+interface Estado {
+  nome: string;
+  sigla: string;
+}
+
+interface Destino {
+  id: string;
+  nomeCidade: string;
+  urlImagem: string;
+  descricao?: string;
+  estados?: Estado;
+}
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,17 +52,9 @@ const HomePage = () => {
 
   // Lógica de busca e agrupamento dos destinos
   const groupedDestinos = useMemo(() => {
-    const filtered = destinos.filter(
-      (destino) =>
-        destino.cidade.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        destino.estado.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return filtered.reduce((acc, destino) => {
-      const { estado } = destino;
-      if (!acc[estado]) {
-        acc[estado] = [];
-      }
+    return destinos.reduce((acc: Record<string, Destino[]>, destino) => {
+      const estado = destino.estados?.nome || "Desconhecido";
+      if (!acc[estado]) acc[estado] = [];
       acc[estado].push(destino);
       return acc;
     }, {});
