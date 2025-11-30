@@ -8,7 +8,7 @@ exports.listarTodas = async (req, res) => {
       .select(`
         id,
         nomeCidade,
-        urlImagem,
+        url_imagem,
         descricao,
         estados:estadoID (
           id,
@@ -40,7 +40,7 @@ exports.buscarPorNome = async (req, res) => {
       .select(`
         id,
         nomeCidade,
-        urlImagem,
+        url_imagem,
         descricao,
         estados:estadoID (
           id,
@@ -92,7 +92,7 @@ exports.buscarPorId = async (req, res) => {
       .from("Cidades")
       .select(`
         *,
-        estado:estadoID (
+        estados:estadoID (
           id,
           nome,
           sigla

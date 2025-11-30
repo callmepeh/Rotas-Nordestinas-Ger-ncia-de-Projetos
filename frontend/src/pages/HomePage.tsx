@@ -21,7 +21,7 @@ interface Estado {
 interface Destino {
   id: string;
   nomeCidade: string;
-  urlImagem: string;
+  url_imagem: string;
   descricao?: string;
   estados?: Estado;
 }

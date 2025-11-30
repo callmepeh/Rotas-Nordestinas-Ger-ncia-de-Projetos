@@ -33,6 +33,8 @@ const LoginForm = () => {
 
       // salvar token
       localStorage.setItem("token", token);
+      // salvar ID do usuário (IMPORTANTÍSSIMO)
+      localStorage.setItem("userID", user.id);
 
       // atualizar contexto global
       loginContext(user);

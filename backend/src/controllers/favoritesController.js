@@ -41,7 +41,7 @@ exports.listarFavoritos = async (req, res) => {
 
     const { data, error } = await supabase
       .from("Favoritos")
-      .select("cidadeId")
+      .select("cidadeID")
       .eq("userID", userID);
 
     if (error) return res.status(400).json({ error: error.message });
