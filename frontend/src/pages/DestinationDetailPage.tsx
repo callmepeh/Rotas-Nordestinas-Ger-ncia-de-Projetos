@@ -11,6 +11,7 @@ import { LeafletMap } from "../components/map/MapLeaflet";
 import 'leaflet/dist/leaflet.css';
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useAuth } from "../context/AuthContext";
+import { FaRegEdit } from "react-icons/fa";
 
 
 interface Destino { 
@@ -91,7 +92,7 @@ const DestinationDetailPage: React.FC = () => {
       userID: currentUserID,
       cidadeID: cidadeID,
     };
-    
+
     try {
       if (isFavorited) {
         await api.delete("/favoritos/remove", { data: payload });
@@ -285,11 +286,18 @@ const DestinationDetailPage: React.FC = () => {
             <p>{destino.usuario?.nomeCompleto || "Usuário anônimo"}</p>
           </div>
         </div>
-        <div onClick={handleFavoriteClick}>
-          {isFavorited ? (
-            <GoHeartFill size={30} />
-          ) : (
-            <GoHeart size={30}/>
+        <div className="icons">
+          {isAuthenticated && (
+            <div onClick={handleFavoriteClick} className="icons-favorite">
+              {isFavorited ? (
+                <GoHeartFill size={30}/>
+              ) : (
+                <GoHeart size={30}/>
+              )}
+            </div>
+          )}
+          {isAuthenticated && user?.funcao === 'colaborador' && (
+            <FaRegEdit size={28}/>
           )}
         </div>
       </div>

@@ -45,7 +45,14 @@
   /* flex-direction: column; */
 }
 
-.flex_area svg { 
+.icons {
+  color: var(--cor-texto);
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.icons-favorite { 
   color: var(--cor-erro);
   align-items: center;
   justify-content: center;
