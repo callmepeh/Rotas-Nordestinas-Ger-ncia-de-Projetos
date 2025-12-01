@@ -14,6 +14,10 @@ exports.listarTodas = async (req, res) => {
           id,
           nome,
           sigla
+        ),
+        usuario:userID (
+          id,
+          nomeCompleto
         )
       `);
 

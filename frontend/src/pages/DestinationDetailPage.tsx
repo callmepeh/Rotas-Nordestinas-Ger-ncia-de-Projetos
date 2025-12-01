@@ -234,8 +234,8 @@ const DestinationDetailPage: React.FC = () => {
 
     try {
       await api.post('/comentarios', {
-          userID: user.id, 
-          cidadeID: parseInt(id ?? "0", 10), 
+          userId: session.user.id, // Corrigido para corresponder ao backend
+          cidadeId: parseInt(id, 10), // Corrigido para corresponder ao backend
           mensagem: newCommentText
       });
 

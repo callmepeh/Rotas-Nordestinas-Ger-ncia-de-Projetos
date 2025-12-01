@@ -3,7 +3,7 @@ const supabase = require("../database/supabaseClient");
 // Adicionar comentário
 exports.adicionar = async (req, res) => {
   try {
-    const { userID, cidadeId, mensagem } = req.body;
+    const { userId, cidadeId, mensagem } = req.body;
 
     const { data, error } = await supabase
       .from("Comentarios")
@@ -43,7 +43,7 @@ exports.listarPorCidade = async (req, res) => {
       return res.json([]);
     }
 
-    const userIds = [...new Set(comentarios.map((c) => c.user_id).filter(id => id))];
+    const userIds = [...new Set(comentarios.map((c) => c.userID).filter(id => id))];
     
     console.log("IDs de usuário extraídos:", userIds);
 
@@ -75,7 +75,7 @@ exports.listarPorCidade = async (req, res) => {
 
     const comentariosComUsuario = comentarios.map((comentario) => ({
       ...comentario,
-      usuario: userMap.get(comentario.user_id) || null,
+      usuario: userMap.get(comentario.userID) || null,
     }));
     
     console.log("Comentários finais com dados do usuário:", comentariosComUsuario);
