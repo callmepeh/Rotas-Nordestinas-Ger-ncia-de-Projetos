@@ -4,6 +4,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import Container from "../components/layout/Container";
 import "./Favourites.css";
+import { useAuth } from "../context/AuthContext";
 
 interface Favorito {
   id: number;
@@ -13,18 +14,26 @@ interface Favorito {
   urlImagem?: string;
 }
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_BASE = "http://localhost:5000";
 
 export default function Favourites() {
   const [favoritos, setFavoritos] = useState<Favorito[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const userID = localStorage.getItem("userID") || "1";
+  const { user, token } = useAuth();
 
   const carregarFavoritos = async () => {
+    if (!user || !token) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE}/favoritos/${userID}`);
+      const response = await axios.get(`${API_BASE}/favoritos/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFavoritos(response.data || []);
     } catch (err) {
       console.error("Erro ao carregar favoritos:", err);
@@ -34,9 +43,14 @@ export default function Favourites() {
   };
 
   const removerFavorito = async (rotaID: number) => {
+    if (!user || !token) return;
+
     try {
       await axios.delete(`${API_BASE}/favoritos/remove`, {
-        data: { userID, rotaID },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: { userID: user.id, rotaID },
       });
       carregarFavoritos();
     } catch (err) {
@@ -46,7 +60,7 @@ export default function Favourites() {
 
   useEffect(() => {
     carregarFavoritos();
-  }, []);
+  }, [user, token]);
 
   return (
     <div className="favourites-page">
