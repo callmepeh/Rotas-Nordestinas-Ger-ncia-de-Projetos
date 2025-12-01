@@ -38,6 +38,10 @@ app.use("/comentarios", comentariosRoutes);
 const comoChegarRoutes = require("./routes/comoChegarRoutes.js");
 app.use("/como-chegar", comoChegarRoutes);
 
+const userRoutes = require("./routes/userRoutes.js");
+app.use("/usuarios", userRoutes);
+
+
 // Start
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
