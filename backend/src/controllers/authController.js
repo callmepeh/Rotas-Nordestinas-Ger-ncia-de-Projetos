@@ -134,7 +134,6 @@ exports.me = async (req, res) => {
 
 
 
-// PUT /auth/update/:id
 exports.updateProfile = async (req, res) => {
   try {
     const { id } = req.params;
@@ -143,14 +142,27 @@ exports.updateProfile = async (req, res) => {
       return res.status(403).json({ error: "Não autorizado." });
     }
 
-    const updates = {
-      ...req.body,
-      funcao: "colaborador_pendente",
-    };
+    const { action, ...updates } = req.body;
+    let novaFuncao = undefined;
+    let mensagem = "";
+
+    // 🔹 Pedido para virar colaborador
+    if (action === "request_collaborator") {
+      novaFuncao = "colaborador_pendente";
+      mensagem = "Sua solicitação foi enviada e está aguardando análise!";
+    } 
+    
+    // 🔹 Atualização de perfil
+    else if (action === "update_profile") {
+      mensagem = "Perfil atualizado com sucesso!";
+    }
 
     const { data, error } = await supabase
       .from("Users")
-      .update(updates)
+      .update({
+        ...updates,
+        ...(novaFuncao && { funcao: novaFuncao })
+      })
       .eq("id", id)
       .select()
       .single();
@@ -160,12 +172,12 @@ exports.updateProfile = async (req, res) => {
     }
 
     return res.json({
-      message: "Perfil atualizado com sucesso!",
+      message: mensagem,
       user: data,
     });
 
   } catch (err) {
-    console.log("ERRO NO UPDATE:", err);
-    return res.status(500).json({ error: err.message });
+    console.error(err);
+    return res.status(500).json({ error: "Erro ao atualizar perfil." });
   }
 };

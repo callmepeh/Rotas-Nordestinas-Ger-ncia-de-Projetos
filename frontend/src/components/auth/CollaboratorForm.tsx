@@ -43,6 +43,7 @@ const CollaboratorForm = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        action: "request_collaborator",
         profissao: formData.profissao,
         cpf: formData.cpf,
       }),
