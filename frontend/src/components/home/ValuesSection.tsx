@@ -32,7 +32,7 @@ const ValuesSection: React.FC = () => {
       <h2 className="values-main-title">Conheça nossos valores</h2>
       <div className="values-grid">
         {valuesData.map((value) => (
-          <div className="value-card" key={value.title}>
+          <div className="value-card1" key={value.title}>
             <div className="value-card-icon-wrapper">
               <img
                 src={value.icon}

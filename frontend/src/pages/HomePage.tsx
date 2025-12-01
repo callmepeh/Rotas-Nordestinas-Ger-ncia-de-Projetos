@@ -93,10 +93,11 @@ const HomePage = () => {
         <FeaturesSection />
       </Container>
 
-      {/* A seção "Sobre" precisa ter o ID "sobre" para o scroll funcionar */}
-      <div id="sobre">
-        <ValuesSection />
-      </div>
+      <Container>
+        <div id="sobre">
+          <ValuesSection />
+        </div>
+      </Container>
 
       <Container>
         <main className="home-content">
