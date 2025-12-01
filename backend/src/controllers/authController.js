@@ -143,14 +143,14 @@ exports.updateProfile = async (req, res) => {
       return res.status(403).json({ error: "Não autorizado." });
     }
 
-    const updates = req.body;
+    const updates = {
+      ...req.body,
+      funcao: "colaborador_pendente",
+    };
 
     const { data, error } = await supabase
       .from("Users")
-      .update({
-        ...updates,
-        funcao: "colaborador", // vira colaborador
-      })
+      .update(updates)
       .eq("id", id)
       .select()
       .single();
@@ -163,7 +163,9 @@ exports.updateProfile = async (req, res) => {
       message: "Perfil atualizado com sucesso!",
       user: data,
     });
+
   } catch (err) {
-    return res.status(500).json({ error: "Erro ao atualizar perfil." });
+    console.log("ERRO NO UPDATE:", err);
+    return res.status(500).json({ error: err.message });
   }
 };

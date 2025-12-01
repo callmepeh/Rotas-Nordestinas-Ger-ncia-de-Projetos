@@ -12,16 +12,43 @@ const PerfilPage = () => {
   	const [estado, setEstado] = useState(user?.estado || "");
   	const [cidade, setCidade] = useState(user?.cidade || "");
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		console.log("Dados para salvar:", {
-			nome,
-			telefone,
-			dataNasc,
-			estado,
-			cidade,
-		});
-  	};
+	const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!user) {
+    alert("Usuário não autenticado.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:5000/auth/update/${user.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`, // token salvo no login
+      },
+      body: JSON.stringify({
+        nomeCompleto: nome,
+        telefone,
+        dataNascimento: dataNasc,
+        siglaEstado: estado,
+        nomeCidade: cidade,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Perfil atualizado com sucesso!");
+    } else {
+      alert(result.error || "Erro ao atualizar perfil.");
+    }
+  } catch (error) {
+    console.error("Erro ao atualizar perfil:", error);
+    alert("Erro desconhecido no servidor.");
+  }
+};
+
 
 	return (
     <div className="perfil-page-wrapper">

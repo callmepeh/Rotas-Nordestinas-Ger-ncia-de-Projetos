@@ -27,16 +27,43 @@ const CollaboratorForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = registerCollaborator(formData);
-    if (result.success) {
-      console.log(result.message);
-      closeModal(); // Fecha o modal após o sucesso
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!user || !token) {
+    console.error("Usuário não autenticado.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:5000/auth/update/${user.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        profissao: formData.profissao,
+        cpf: formData.cpf,
+      }),
+    });
+
+    const result = await response.json();
+
+    console.log("Resultado da atualização:", result);
+
+    if (response.ok) {
+      localStorage.setItem("user", JSON.stringify(result.user));
+      alert("Sua solicitação foi enviada e está aguardando análise!");
+      closeModal();
     } else {
-      console.error(result.message);
+      alert(result.error || "Erro ao atualizar perfil.");
     }
-  };
+  } catch (err) {
+    console.error("Erro ao enviar dados:", err);
+  }
+};
+
 
   // --- ESTILOS IDÊNTICOS AO LoginForm ---
 

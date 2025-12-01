@@ -1,5 +1,5 @@
 // middlewares/authMiddleware.js
-const { supabase } = require("../database/supabaseClient");
+const supabase = require("../database/supabaseClient");
 
 module.exports = async function (req, res, next) {
   const token = req.headers.authorization?.replace("Bearer ", "");
