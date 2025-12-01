@@ -16,7 +16,7 @@ import "./Navbar.css";
 import Container from "./Container";
 
 const Navbar = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user } = useAuth(); // <- Usamos 'isAuthenticated' e 'user' aqui
   const { showLoginModal, showRegisterModal, showCollaboratorModal } = useUI();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -40,7 +40,7 @@ const Navbar = () => {
   const renderUserActions = () => {
     // Cenário 1: Usuário está autenticado
     if (isAuthenticated) {
-      // Se for um colaborador, mostra "Crie uma Rota"
+      // Se for um colaborador, mostra "Crie uma Rota" junto ao ícone
       if (user?.role === "colaborador") {
         return (
           <div className="nav-actions">
@@ -128,6 +128,16 @@ const Navbar = () => {
       >
         Favoritos
       </NavLink>
+      
+      {isAuthenticated && user?.funcao === "colaborador" && (
+        <NavLink
+          to="/sugerir-rota"
+          className="nav-link"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          Sugerir Rota
+        </NavLink>
+      )}
     </>
   );
 

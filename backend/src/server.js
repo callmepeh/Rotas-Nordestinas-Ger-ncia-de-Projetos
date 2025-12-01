@@ -41,6 +41,8 @@ app.use("/como-chegar", comoChegarRoutes);
 const userRoutes = require("./routes/userRoutes.js");
 app.use("/usuarios", userRoutes);
 
+const sugerirRoutes = require("./routes/sugerirRoutes.js");
+app.use("/sugerir-rota", sugerirRoutes);
 
 // Start
 app.listen(PORT, () => {

@@ -1,6 +1,6 @@
 // src/pages/SugerirRotaPage.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import Container from "../components/layout/Container";
@@ -8,7 +8,6 @@ import ImageUpload from "../components/forms/ImageUpload";
 import { FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 import "./SugerirRotaPage.css";
 
-// --- TIPOS PARA OS NOSSOS DADOS ---
 interface DynamicItem {
   id: number;
 }
@@ -36,7 +35,18 @@ interface DicaLocalItem extends DynamicItem {
 }
 
 const SugerirRotaPage: React.FC = () => {
-  // --- STATES PARA CADA SEÇÃO DINÂMICA ---
+  // Estados IBGE
+  const [estados, setEstados] = useState<any[]>([]);
+  const [cidades, setCidades] = useState<any[]>([]);
+
+  const [estadoSelecionado, setEstadoSelecionado] = useState("");
+  const [cidadeSelecionada, setCidadeSelecionada] = useState("");
+
+  // Latitude e longitude
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+
+  // --- Dados Dinâmicos ---
   const [comoChegarItens, setComoChegarItens] = useState<ComoChegarItem[]>([
     { id: Date.now(), nome: "", categoria: "", descricao: "" },
   ]);
@@ -53,7 +63,55 @@ const SugerirRotaPage: React.FC = () => {
     { id: Date.now(), nome: "", categoria: "", descricao: "" },
   ]);
 
-  // --- FUNÇÕES GENÉRICAS PARA MANIPULAR OS STATES ---
+  // -------------------------------
+  // BUSCAR ESTADOS DO IBGE
+  // -------------------------------
+  useEffect(() => {
+    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
+      .then((res) => res.json())
+      .then((data) => setEstados(data));
+  }, []);
+
+  // -------------------------------
+  // BUSCAR CIDADES BASEADO NO ESTADO
+  // -------------------------------
+  useEffect(() => {
+    if (!estadoSelecionado) return;
+
+    fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoSelecionado}/municipios`
+    )
+      .then((res) => res.json())
+      .then((data) => setCidades(data));
+  }, [estadoSelecionado]);
+
+  // -------------------------------
+  // BUSCAR LATITUDE E LONGITUDE (OSM)
+  // -------------------------------
+  useEffect(() => {
+    if (!cidadeSelecionada || !estadoSelecionado) return;
+
+    const cidadeObj = cidades.find((c) => c.id == cidadeSelecionada);
+    if (!cidadeObj) return;
+
+    const cidadeNome = cidadeObj.nome;
+    const estadoSigla = estados.find((e) => e.id == estadoSelecionado)?.sigla;
+
+    fetch(
+      `https://nominatim.openstreetmap.org/search?city=${cidadeNome}&state=${estadoSigla}&country=Brazil&format=json&limit=1`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.length > 0) {
+          setLatitude(data[0].lat);
+          setLongitude(data[0].lon);
+        }
+      });
+  }, [cidadeSelecionada]);
+
+  // -------------------------------
+  // Funções dinâmicas
+  // -------------------------------
   const addItem = <T extends DynamicItem>(
     setter: React.Dispatch<React.SetStateAction<T[]>>,
     newItem: Omit<T, "id">
@@ -86,25 +144,67 @@ const SugerirRotaPage: React.FC = () => {
         <Container>
           <h1 className="main-title">Sugestão de Rotas</h1>
           <form className="suggestion-form">
-            {/* Seção de Informações Iniciais (Estática) */}
+            
+            {/* =============== INFORMAÇÕES INICIAIS =============== */}
             <div className="form-section">
               <h2 className="section-title">Informações Iniciais</h2>
+
               <div className="form-grid">
+
+                {/* ESTADO */}
                 <div className="form-group">
                   <label htmlFor="estado">Estado</label>
-                  <select id="estado" name="estado">
+                  <select
+                    id="estado"
+                    value={estadoSelecionado}
+                    onChange={(e) => {
+                      setEstadoSelecionado(e.target.value);
+                      setCidadeSelecionada("");
+                    }}
+                  >
                     <option value="">Selecionar o Estado</option>
+                    {estados.map((estado) => (
+                      <option key={estado.id} value={estado.id}>
+                        {estado.nome}
+                      </option>
+                    ))}
                   </select>
                 </div>
+
+                {/* CIDADE */}
                 <div className="form-group">
                   <label htmlFor="cidade">Cidade</label>
-                  <select id="cidade" name="cidade">
+                  <select
+                    id="cidade"
+                    value={cidadeSelecionada}
+                    onChange={(e) => setCidadeSelecionada(e.target.value)}
+                  >
                     <option value="">Selecionar a Cidade</option>
+                    {cidades.map((cidade) => (
+                      <option key={cidade.id} value={cidade.id}>
+                        {cidade.nome}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
+
+              {/* LATITUDE / LONGITUDE */}
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Latitude</label>
+                  <input type="text" value={latitude} readOnly />
+                </div>
+
+                <div className="form-group">
+                  <label>Longitude</label>
+                  <input type="text" value={longitude} readOnly />
+                </div>
+              </div>
+
               <ImageUpload />
             </div>
+
 
             {/* Seção Como Chegar (Dinâmica) */}
             <div className="form-section">
