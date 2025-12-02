@@ -9,6 +9,10 @@ import InfoCarousel from "../components/destinations/InfoCarousel";
 import { api } from "../services/api";
 import { LeafletMap } from "../components/map/MapLeaflet";
 import 'leaflet/dist/leaflet.css';
+import { useAuth } from "../context/AuthContext";
+import { FaRegEdit } from "react-icons/fa";
+import { GoHeart, GoHeartFill } from "react-icons/go";
+
 
 interface Destino { 
   id: string;
@@ -55,6 +59,8 @@ const DestinationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [destino, setDestino] = useState<Destino | null>(null);
 
+  const [isFavorited, setIsFavorited] = useState(false);
+
   const [comoChegar, setComoChegar] = useState<ComoChegarItem[]>([]);
   const [pontosTuristicos, setPontosTuristicos] = useState<CarouselItem[]>([]);
   const [atividades, setAtividades] = useState<CarouselItem[]>([]);
@@ -64,13 +70,65 @@ const DestinationDetailPage: React.FC = () => {
   const [newCommentText, setNewCommentText] = useState('');
   const [commentError, setCommentError] = useState('');
 
-  // Substitua pela lógica real de autenticação (Context API, etc.)
-  const [session, setSession] = useState<{ user: { id: string } } | null>({ user: { id: "a9a8b8e4-3b7b-4b4f-8b3b-5b3b3b3b3b3b" } });
+  const { user, isAuthenticated } = useAuth();
 
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Função para lidar com o clique no botão de favorito
+  const handleFavoriteClick = async () => {
+    if (!isAuthenticated || !user) {
+      alert("Você precisa estar logado para favoritar um destino.");
+      return;
+    }
+  
+    if (!id) return;
+
+    const cidadeID = parseInt(id, 10);
+    const currentUserID = user.id;
+  
+    const payload = {
+      userID: currentUserID,
+      cidadeID: cidadeID,
+    };
+
+    try {
+      if (isFavorited) {
+        await api.delete("/favoritos/remove", { data: payload });
+        setIsFavorited(false);
+      } else {
+        await api.post("/favoritos/add", payload);
+        setIsFavorited(true);
+      }
+    } catch (err) {
+      console.error("Erro ao atualizar favorito:", err);
+      alert("Não foi possível atualizar o status de favorito. Tente novamente.");
+    }
+  };
+
+  // Verifica se o destino está favoritado ao carregar a página
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (isAuthenticated && user && id) {
+        try {
+          const response = await api.get(`/favoritos/${user.id}`);
+          const favoriteIds = response.data.map((fav: { cidadeID: number }) => fav.cidadeID);
+          if (favoriteIds.includes(parseInt(id, 10))) {
+            setIsFavorited(true);
+          } else {
+            setIsFavorited(false);
+          }
+        } catch (err) {
+          console.error("Erro ao verificar status de favorito:", err);
+        }
+      } else {
+        setIsFavorited(false); // Garante que o estado é falso se o usuário não estiver logado
+      }
+    };
+    checkFavoriteStatus();
+  }, [id, user, isAuthenticated]);
 
   // Função para buscar comentários
   const fetchComments = useCallback(async () => {
@@ -168,7 +226,7 @@ const DestinationDetailPage: React.FC = () => {
    const handleCommentSubmit = async (e:  React.FormEvent) => {
     e.preventDefault();
 
-    if (!session || !session.user || !newCommentText.trim() || !id) {
+    if (!isAuthenticated || !session.user || !newCommentText.trim() || !id) {
       setCommentError('Você precisa estar logado e o comentário não pode ser vazio.');
       return;
     }
@@ -176,8 +234,8 @@ const DestinationDetailPage: React.FC = () => {
 
     try {
       await api.post('/comentarios', {
-          userId: session.user.id, // Corrigido para corresponder ao backend
-          cidadeId: parseInt(id, 10), // Corrigido para corresponder ao backend
+          userId: session.user.id, 
+          cidadeId: parseInt(id ?? "0", 10), 
           mensagem: newCommentText
       });
 
@@ -222,10 +280,26 @@ const DestinationDetailPage: React.FC = () => {
       </div>
 
       <div className="flex_area">
-        <p className="sugested_user">Rota sugerida por:</p>
-        <div className="user">
-          <FaUserCircle size={30} />
-          <p>{destino.usuario?.nomeCompleto || "Usuário anônimo"}</p>
+        <div style={{width:'200px'}}>
+          <p className="sugested_user">Rota sugerida por:</p>
+          <div className="user">
+            <FaUserCircle size={30} />
+            <p>{destino.usuario?.nomeCompleto || "Usuário anônimo"}</p>
+          </div>
+        </div>
+        <div className="icons">
+          {isAuthenticated && (
+            <div onClick={handleFavoriteClick} className="icons-favorite">
+              {isFavorited ? (
+                <GoHeartFill size={30}/>
+              ) : (
+                <GoHeart size={30}/>
+              )}
+            </div>
+          )}
+          {isAuthenticated && user?.funcao === 'colaborador' && (
+            <FaRegEdit size={28}/>
+          )}
         </div>
       </div>
 
@@ -291,7 +365,7 @@ const DestinationDetailPage: React.FC = () => {
           <section className="container_feedbacks">
             <h2>Feedbacks</h2>
 
-            {session && session.user ? (
+            {/* {isAuthenticated && session.user ? (
               <form onSubmit={handleCommentSubmit} className="commentForm">
                 <textarea
                   className="commentInput"
@@ -308,7 +382,7 @@ const DestinationDetailPage: React.FC = () => {
               </form>
             ) : (
                 <p>Faça login para adicionar um comentário.</p>
-            )}
+            )} */}
 
             {comentarios?.length > 0 ? (
               comentarios.map((comentario) => (
