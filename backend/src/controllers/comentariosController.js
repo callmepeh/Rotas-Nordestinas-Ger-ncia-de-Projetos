@@ -3,21 +3,28 @@ const supabase = require("../database/supabaseClient");
 // Adicionar comentário
 exports.adicionar = async (req, res) => {
   try {
-    const { userId, cidadeId, mensagem } = req.body;
+    const { userID, cidadeID, mensagem } = req.body;
+
+    if (!userID || !cidadeID) {
+      return res.status(400).json({ error: "userID e cidadeID são obrigatórios." });
+    }
 
     const { data, error } = await supabase
       .from("Comentarios")
       .insert([
         {
-          userID: userId,
-          cidadeID: cidadeId,
+          userID: userID,
+          cidadeID: cidadeID,
           mensagem,
         },
       ])
       .select();
 
-    if (error) return res.status(400).json({ error: error.message });
-
+    if (error) {
+      console.error("Erro Supabase ao adicionar comentário:", error);
+      return res.status(400).json({ error: error.message });
+    }
+    
     return res.json(data[0]);
   } catch (err) {
     console.error("Erro ao adicionar comentário:", err);
@@ -56,7 +63,7 @@ exports.listarPorCidade = async (req, res) => {
 
     const { data: usuarios, error: usuariosError } = await supabase
       .from("Users")
-      .select("id, nome")
+      .select("id, nomeCompleto")
       .in("id", userIds);
 
     if (usuariosError) {
@@ -69,7 +76,7 @@ exports.listarPorCidade = async (req, res) => {
     console.log("Usuários recebidos do Supabase:", usuarios);
 
 
-    const userMap = new Map(usuarios.map((u) => [u.id, u]));
+    const userMap = new Map(usuarios.map((u) => [u.id, { nome: u.nomeCompleto }]));
     console.log("Mapa de usuários criado:", userMap);
 
 

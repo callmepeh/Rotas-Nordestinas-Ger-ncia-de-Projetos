@@ -226,7 +226,7 @@ const DestinationDetailPage: React.FC = () => {
    const handleCommentSubmit = async (e:  React.FormEvent) => {
     e.preventDefault();
 
-    if (!isAuthenticated || !session.user || !newCommentText.trim() || !id) {
+    if (!isAuthenticated || !user || !newCommentText.trim() || !id) {
       setCommentError('Você precisa estar logado e o comentário não pode ser vazio.');
       return;
     }
@@ -234,8 +234,8 @@ const DestinationDetailPage: React.FC = () => {
 
     try {
       await api.post('/comentarios', {
-          userId: session.user.id, 
-          cidadeId: parseInt(id ?? "0", 10), 
+          userID: user.id, 
+          cidadeID: parseInt(id ?? "0", 10), 
           mensagem: newCommentText
       });
 
@@ -365,7 +365,7 @@ const DestinationDetailPage: React.FC = () => {
           <section className="container_feedbacks">
             <h2>Feedbacks</h2>
 
-            {/* {isAuthenticated && session.user ? (
+            {isAuthenticated && user ? (
               <form onSubmit={handleCommentSubmit} className="commentForm">
                 <textarea
                   className="commentInput"
@@ -382,7 +382,7 @@ const DestinationDetailPage: React.FC = () => {
               </form>
             ) : (
                 <p>Faça login para adicionar um comentário.</p>
-            )} */}
+            )}
 
             {comentarios?.length > 0 ? (
               comentarios.map((comentario) => (
