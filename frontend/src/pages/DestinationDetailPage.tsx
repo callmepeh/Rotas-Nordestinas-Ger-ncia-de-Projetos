@@ -8,6 +8,28 @@ import InfoCarousel from "../components/destinations/InfoCarousel";
 import { MapGoogle } from "../components/map/MapGoogle";
 import { FaBusSimple, FaPlane, FaShip } from "react-icons/fa6";
 
+interface Destino { 
+  id: string;
+  nomeCidade: string;
+  url_imagem: string;
+  descricao?: string;
+  estado?: {
+    nome: string;
+    sigla: string;
+  };
+  usuario?: {
+    id: string;
+    nomeCompleto: string;
+  };
+}
+
+interface CarouselItem {
+  id: string;
+  titulo: string;
+  descricao: string;
+  url_imagem: string;
+}
+
 interface ComoChegarItem {
   id: number;
   tipo: "Terrestre" | "Aéreo" | "Marítimo";
@@ -16,13 +38,63 @@ interface ComoChegarItem {
 }
 
 const DestinationDetailPage = () => {
-  // O hook useParams() pega os parâmetros da URL.
-  // No nosso caso, o `:id` que definiremos na rota.
   const { id } = useParams<{ id: string }>();
+  const [destino, setDestino] = useState<Destino | null>(null);
 
-  // Encontra o destino correspondente no nosso banco de dados falso
-  const destino = DESTINOS.find((d) => d.id === id);
+  const [comoChegar, setComoChegar] = useState<ComoChegarItem[]>([]);
+  const [pontosTuristicos, setPontosTuristicos] = useState<CarouselItem[]>([]);
+  const [atividades, setAtividades] = useState<CarouselItem[]>([]);
+  const [dicas, setDicas] = useState<CarouselItem[]>([]);
 
+  // Busca o destino pelo ID vindo da URL
+  useEffect(() => {
+    async function fetchDestino() {
+      try {
+        //Busca dados do destino
+        const response = await api.get(`/cidades/${id}`);
+        const destinoData = response.data;
+        // console.log("Destino carregado:", response.data);
+        setDestino(response.data);
+        
+        //Busca dados de como chegar
+        const comoChegarResponse = await api.get(`/como-chegar/${id}`);
+        // console.log("Como Chegar carregado:", comoChegarResponse.data);
+        setComoChegar(comoChegarResponse.data);
+        
+        //Busca dados de pontos turísticos
+        const pontosTuristicosResponse = await api.get(`/pontos/${id}`);
+        // console.log("Pontos Turísticos carregados:", pontosTuristicosResponse.data);
+        setPontosTuristicos(pontosTuristicosResponse.data);
+        
+        //Busca dados de atividades
+        const atividadesResponse = await api.get(`/atividades/${id}`);
+        // console.log("Atividades carregadas:", atividadesResponse.data);
+        setAtividades(atividadesResponse.data);
+        
+        //Busca dados de dicas
+        const dicasResponse = await api.get(`/dicas/${id}`);
+        // console.log("Dicas carregadas:", dicasResponse.data);
+        setDicas(dicasResponse.data);
+        
+        await fetchComments();
+
+       // Define coordenadas vindo do backend
+      if (destinoData.latitude && destinoData.longitude) {
+        setCoordinates([destinoData.latitude, destinoData.longitude]);
+      }
+
+      } catch (err) {
+        console.error("Erro ao buscar destino:", err);
+        setError("Destino não encontrado.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (id) fetchDestino();
+    
+  }, [id, fetchComments]);
+  
   // Se o destino não for encontrado, exibe uma mensagem
   if (!destino) {
     return (
@@ -80,33 +152,33 @@ const DestinationDetailPage = () => {
           <div className="carousel-section">
             <InfoCarousel
               titulo="Pontos Turísticos"
-              itens={destino.pontosTuristicos.map((pt) => ({
+              itens={pontosTuristicos.map((pt) => ({
                 id: String(pt.id),
-                imagem: pt.imagem,
-                nome: pt.nome,
+                imagem: pt.url_imagem,
+                nome: pt.titulo,
                 descricao: pt.descricao,
               }))}
             />
 
-            {/* <InfoCarousel
+            <InfoCarousel
             titulo="Atividades"
-            itens={destino.atividades.map(a => ({
+            itens={atividades.map(a => ({
               id: String(a.id),
-              imagem: a.imagem,
-              nome: a.nome,
+              imagem: a.url_imagem,
+              nome: a.titulo,
               descricao: a.descricao
             }))}
           />
 
           <InfoCarousel
             titulo="Dicas"
-            itens={destino.dicas.map(d => ({
+            itens={dicas.map(d => ({
               id: String(d.id),
-              imagem: d.imagem,
-              nome: d.nome,
+              imagem: d.url_imagem,
+              nome: d.titulo,
               descricao: d.descricao
             }))}
-          /> */}
+          />
           </div>
 
           <div className="localization-grid">
