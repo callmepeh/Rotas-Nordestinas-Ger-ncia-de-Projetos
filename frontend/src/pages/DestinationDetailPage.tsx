@@ -1,12 +1,17 @@
 import { useParams } from "react-router-dom";
-import { DESTINOS } from "../data/database";
+import React, { useState, useEffect, useCallback } from "react";
 import Container from "../components/layout/Container";
 import Navbar from "../components/layout/Navbar";
 import "./DestinationDetailPage.css";
+import Footer from "../components/layout/Footer";
 import { FaUserCircle } from "react-icons/fa";
 import InfoCarousel from "../components/destinations/InfoCarousel";
-import { MapGoogle } from "../components/map/MapGoogle";
-import { FaBusSimple, FaPlane, FaShip } from "react-icons/fa6";
+import { api } from "../services/api";
+import { LeafletMap } from "../components/map/MapLeaflet";
+import 'leaflet/dist/leaflet.css';
+import { useAuth } from "../context/AuthContext";
+import { FaRegEdit } from "react-icons/fa";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 
 interface Destino { 
   id: string;
@@ -45,6 +50,9 @@ const DestinationDetailPage = () => {
   const [pontosTuristicos, setPontosTuristicos] = useState<CarouselItem[]>([]);
   const [atividades, setAtividades] = useState<CarouselItem[]>([]);
   const [dicas, setDicas] = useState<CarouselItem[]>([]);
+
+  const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
+
 
   // Busca o destino pelo ID vindo da URL
   useEffect(() => {
@@ -184,12 +192,20 @@ const DestinationDetailPage = () => {
           <div className="localization-grid">
             <section className="map-section">
               <h2>Destino</h2>
-              <MapGoogle city={destino.cidade} state={destino.estado} />
+              {coordinates ? (
+                <LeafletMap 
+                  latitude={coordinates[0]} 
+                  longitude={coordinates[1]}
+                  popupText={destino?.nomeCidade}
+                />
+                ) : (
+                  <p>Carregando mapa...</p>
+                )}
             </section>
 
             <section className="to-arrive">
               <h2>Como Chegar</h2>
-              {destino.comoChegar.map(renderComoChegarItem)}
+              {comoChegar.map(renderComoChegarItem)}
             </section>
           </div>
 
