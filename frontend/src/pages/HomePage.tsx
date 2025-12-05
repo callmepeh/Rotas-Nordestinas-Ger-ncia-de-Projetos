@@ -1,8 +1,5 @@
-// src/pages/HomePage.tsx
-
-import { useState, useMemo, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { scroller, Link as ScrollLink } from "react-scroll";
+import { useState, useEffect, useMemo } from "react";
+import { Link as ScrollLink } from "react-scroll";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import Container from "../components/layout/Container";
@@ -32,25 +29,53 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const location = useLocation();
-
-  // Efeito para rolar a tela quando vindo de outra página
-  useEffect(() => {
-    async function fetchDestinos() {
-      try {
-        const response = await fetch("http://localhost:5000/api/cidades");
-        const data = await response.json();
-        setDestinos(data);
-      } catch (err) {
-        setError("Erro ao carregar os destinos.");
-      } finally {
-        setLoading(false);
-      }
+  // 🔹 Função para buscar todas as cidades
+  const fetchAllDestinos = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get("/cidades");
+      setDestinos(response.data);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao carregar destinos.");
+    } finally {
+      setLoading(false);
     }
-    fetchDestinos();
+  };
+
+  // 🔹 Função para buscar por nome
+  const fetchByNome = async (nome: string) => {
+    try {
+      setLoading(true);
+      const response = await api.get(`/cidades/buscar?nome=${nome}`);
+      setDestinos(response.data);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao buscar destinos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🔹 Carrega todos ao abrir
+  useEffect(() => {
+    fetchAllDestinos();
   }, []);
 
-  // Lógica de busca e agrupamento dos destinos
+  // 🔹 Pesquisa automática ao digitar
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      fetchAllDestinos();
+    } else {
+      const delay = setTimeout(() => {
+        fetchByNome(searchTerm);
+      }, 500); // debounce de meio segundo
+
+      return () => clearTimeout(delay);
+    }
+  }, [searchTerm]);
+
+  // 🔹 Agrupa por estado
   const groupedDestinos = useMemo(() => {
     return destinos.reduce((acc: Record<string, Destino[]>, destino) => {
       const estado = destino.estados?.nome || "Desconhecido";
@@ -58,7 +83,7 @@ const HomePage = () => {
       acc[estado].push(destino);
       return acc;
     }, {});
-  }, [searchTerm, destinos]);
+  }, [destinos]);
 
   return (
     <div>
@@ -106,22 +131,29 @@ const HomePage = () => {
               <h2>Destinos</h2>
               <input
                 type="text"
-                placeholder="Pesquise por um destino"
+                placeholder="Pesquise por uma cidade"
                 className="search-bar"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            <div className="destinations-list">
-              {Object.entries(groupedDestinos).map(([estado, destinos]) => (
-                <DestinationsCarousel
-                  key={estado}
-                  estado={estado}
-                  destinos={destinos}
-                />
-              ))}
-            </div>
+            {loading ? (
+              <p>Carregando destinos...</p>
+            ) : error ? (
+              <p style={{ color: "red" }}>{error}</p>
+            ) : (
+              <div className="destinations-list">
+                {Object.entries(groupedDestinos).map(([estado, cidades]) => (
+                  <DestinationsCarousel
+                    key={estado}
+                    estado={estado}
+                    destinos={cidades}   // ← envia tudo, inclusive estado, imagem, descrição
+                  />
+                ))}
+              </div>
+
+            )}
           </section>
         </main>
       </Container>
