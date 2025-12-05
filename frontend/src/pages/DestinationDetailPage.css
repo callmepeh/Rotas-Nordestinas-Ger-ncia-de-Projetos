@@ -15,15 +15,8 @@
   position: relative;
 }
 
-/* .detail-hero {
-  height: 100%;
-  display: flex;
-  align-items: center;
-} */
-
 .detail-hero {
   text-align: left;
-  /* max-width: 600px; */
   padding-left: 0;
   align-items: end;
 }
@@ -73,12 +66,16 @@
 }
 
 .user p { 
-    font-size: 20px;
-    color: var(--cor-primaria);
+  font-size: 20px;
+  color: var(--cor-primaria);
 }
 
 .user svg { 
-    color: var(--cor-primaria);
+  color: var(--cor-primaria);
+}
+
+.description-section {
+  text-align: justify;
 }
 
 .destination-card-link {
@@ -116,7 +113,7 @@
   right: 0;
   bottom: 0;
 
-  background-color: rgba(0, 0, 0, 0.1); /* Preto com 40% de opacidade */
+  background-color: rgba(0, 0, 0, 0.1); 
 
   display: flex;
   justify-content: center;
@@ -150,12 +147,11 @@
 .localization-grid,
 .to-arrive {
   background-color: var(--cor-fundo);
-  /* display: flex; */
+  text-align: justify;
 }
 
 .contaiter-to-arrive {
   padding: 10px;
-  /* margin-bottom: 15px; */
 }
 
 .title {
@@ -165,7 +161,7 @@
 
 .title h3 {
   font-size: 18px;
-  color: var(--cor-primaria);
+  color: var(--cor-secundaria);
   margin: 10px 0;
 }
 
@@ -183,10 +179,13 @@
   color: var(--cor-texto);
 }
 
-/* .icon-type svg {
-  color: var(--cor-primaria);
-  font-size: 2px;
-} */
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+  margin-top: 10px;
+  margin-bottom: 10px; 
+}
 
 .commentInput {
   width: 100%;

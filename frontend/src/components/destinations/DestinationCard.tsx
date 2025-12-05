@@ -17,7 +17,7 @@ const DestinationCard: React.FC<DestinationCardProps> = ({ destino }) => {
           className="card-image"
         />
         <div className="card-overlay">
-          <h3 className="card-title">{destino.cidade}</h3>
+          <h3 className="card-title">{destino.nomeCidade}</h3>
         </div>
       </div>
     </Link>
