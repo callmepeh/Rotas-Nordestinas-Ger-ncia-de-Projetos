@@ -3,28 +3,21 @@ const supabase = require("../database/supabaseClient");
 // Adicionar comentário
 exports.adicionar = async (req, res) => {
   try {
-    const { userID, cidadeID, mensagem } = req.body;
-
-    if (!userID || !cidadeID) {
-      return res.status(400).json({ error: "userID e cidadeID são obrigatórios." });
-    }
+    const { userId, cidadeId, mensagem } = req.body;
 
     const { data, error } = await supabase
       .from("Comentarios")
       .insert([
         {
-          userID: userID,
-          cidadeID: cidadeID,
+          userID: userId,
+          cidadeID: cidadeId,
           mensagem,
         },
       ])
       .select();
 
-    if (error) {
-      console.error("Erro Supabase ao adicionar comentário:", error);
-      return res.status(400).json({ error: error.message });
-    }
-    
+    if (error) return res.status(400).json({ error: error.message });
+
     return res.json(data[0]);
   } catch (err) {
     console.error("Erro ao adicionar comentário:", err);
@@ -43,7 +36,12 @@ exports.listarPorCidade = async (req, res) => {
       .eq("cidadeID", cidadeId)
       .order("created_at", { ascending: false });
 
-    if (error) return res.status(400).json({ error: error.message });
+    if (comentariosError) {
+      console.error("Erro Supabase ao listar comentários:", comentariosError);
+      return res.status(400).json({ error: comentariosError.message });
+    }
+    
+    console.log("Comentários recebidos do Supabase:", comentarios);
 
 
     if (!comentarios || comentarios.length === 0) {
@@ -63,7 +61,7 @@ exports.listarPorCidade = async (req, res) => {
 
     const { data: usuarios, error: usuariosError } = await supabase
       .from("Users")
-      .select("id, nomeCompleto")
+      .select("id, nome")
       .in("id", userIds);
 
     if (usuariosError) {
@@ -76,7 +74,7 @@ exports.listarPorCidade = async (req, res) => {
     console.log("Usuários recebidos do Supabase:", usuarios);
 
 
-    const userMap = new Map(usuarios.map((u) => [u.id, { nome: u.nomeCompleto }]));
+    const userMap = new Map(usuarios.map((u) => [u.id, u]));
     console.log("Mapa de usuários criado:", userMap);
 
 
