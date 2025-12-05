@@ -1,25 +1,30 @@
 const supabase = require("../database/supabaseClient.js");
 
+// =========================
 // GET /cidades
+// =========================
 exports.listarTodas = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("Cidades")
       .select(`
-        id,
-        nomeCidade,
-        url_imagem,
-        descricao,
-        estados:estadoID (
-          id,
-          nome,
-          sigla
-        ),
-        usuario:userID (
-          id,
-          nomeCompleto
-        )
-      `);
+  id,
+  nomeCidade,
+  url_imagem,
+  descricao,
+  latitude,
+  longitude,
+  estados:estadoID (
+    id,
+    nome,
+    sigla
+  ),
+  usuario:userID (
+    id,
+    nomeCompleto
+  )
+`)
+
 
     if (error) {
       console.error("Erro Supabase:", error.message);
@@ -34,7 +39,9 @@ exports.listarTodas = async (req, res) => {
   }
 };
 
-
+// =========================
+// GET /cidades/buscar?nome=
+// =========================
 exports.buscarPorNome = async (req, res) => {
   try {
     const nome = req.query.nome;
@@ -42,16 +49,23 @@ exports.buscarPorNome = async (req, res) => {
     const { data, error } = await supabase
       .from("Cidades")
       .select(`
-        id,
-        nomeCidade,
-        url_imagem,
-        descricao,
-        estados:estadoID (
-          id,
-          nome,
-          sigla
-        )
-      `)
+  id,
+  nomeCidade,
+  url_imagem,
+  descricao,
+  latitude,
+  longitude,
+  estados:estadoID (
+    id,
+    nome,
+    sigla
+  ),
+  usuario:userID (
+    id,
+    nomeCompleto
+  )
+`)
+
       .ilike("nomeCidade", `%${nome}%`);
 
     if (error) return res.status(400).json({ error: error.message });
@@ -64,16 +78,33 @@ exports.buscarPorNome = async (req, res) => {
   }
 };
 
-
-
+// =========================
 // GET /cidades/estado/:estadoID
+// =========================
 exports.listarPorEstado = async (req, res) => {
   try {
     const { estadoID } = req.params;
 
     const { data, error } = await supabase
       .from("Cidades")
-      .select("*")
+      .select(`
+  id,
+  nomeCidade,
+  url_imagem,
+  descricao,
+  latitude,
+  longitude,
+  estados:estadoID (
+    id,
+    nome,
+    sigla
+  ),
+  usuario:userID (
+    id,
+    nomeCompleto
+  )
+`)
+
       .eq("estadoID", estadoID);
 
     if (error) return res.status(500).json({ error: error.message });
@@ -86,8 +117,9 @@ exports.listarPorEstado = async (req, res) => {
   }
 };
 
-
+// =========================
 // GET /cidades/:id
+// =========================
 exports.buscarPorId = async (req, res) => {
   try {
     const { id } = req.params;
@@ -95,13 +127,23 @@ exports.buscarPorId = async (req, res) => {
     const { data: cidade, error } = await supabase
       .from("Cidades")
       .select(`
-        *,
-        estados:estadoID (
-          id,
-          nome,
-          sigla
-        )
-      `)
+  id,
+  nomeCidade,
+  url_imagem,
+  descricao,
+  latitude,
+  longitude,
+  estados:estadoID (
+    id,
+    nome,
+    sigla
+  ),
+  usuario:userID (
+    id,
+    nomeCompleto
+  )
+`)
+
       .eq("id", id)
       .single();
 
@@ -112,21 +154,6 @@ exports.buscarPorId = async (req, res) => {
 
     if (!cidade) {
       return res.status(404).json({ error: "Cidade não encontrada." });
-    }
-
-    // Buscar o usuário criador (se existir)
-    if (cidade.userID) {
-      const { data: usuario, error: usuarioError } = await supabase
-        .from("Users")
-        .select("nomeCompleto")
-        .eq("id", cidade.userID)
-        .single();
-
-      if (!usuarioError) {
-        cidade.usuario = usuario;
-      } else {
-        cidade.usuario = null;
-      }
     }
 
     return res.json(cidade);

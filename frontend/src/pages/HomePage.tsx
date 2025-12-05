@@ -29,7 +29,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 🔹 Função para buscar todas as cidades
+  // 🟢 Carrega todos os destinos APENAS ao entrar na página
   const fetchAllDestinos = async () => {
     try {
       setLoading(true);
@@ -43,7 +43,7 @@ const HomePage = () => {
     }
   };
 
-  // 🔹 Função para buscar por nome
+  // 🟡 Busca por nome
   const fetchByNome = async (nome: string) => {
     try {
       setLoading(true);
@@ -57,25 +57,23 @@ const HomePage = () => {
     }
   };
 
-  // 🔹 Carrega todos ao abrir
+  // 🔥 Carrega todos UM ÚNICO VEZ
   useEffect(() => {
     fetchAllDestinos();
   }, []);
 
-  // 🔹 Pesquisa automática ao digitar
+  // 🔥 Busca por nome SOMENTE quando tem texto digitado
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      fetchAllDestinos();
-    } else {
-      const delay = setTimeout(() => {
-        fetchByNome(searchTerm);
-      }, 500); // debounce de meio segundo
+    if (searchTerm.trim() === "") return; // ← evita sobrescrever os destinos já carregados
 
-      return () => clearTimeout(delay);
-    }
+    const delay = setTimeout(() => {
+      fetchByNome(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(delay);
   }, [searchTerm]);
 
-  // 🔹 Agrupa por estado
+  // 🔵 Agrupa por estado — seguro
   const groupedDestinos = useMemo(() => {
     return destinos.reduce((acc: Record<string, Destino[]>, destino) => {
       const estado = destino.estados?.nome || "Desconhecido";
@@ -148,11 +146,10 @@ const HomePage = () => {
                   <DestinationsCarousel
                     key={estado}
                     estado={estado}
-                    destinos={cidades}   // ← envia tudo, inclusive estado, imagem, descrição
+                    destinos={cidades}
                   />
                 ))}
               </div>
-
             )}
           </section>
         </main>

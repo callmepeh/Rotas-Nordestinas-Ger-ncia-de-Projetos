@@ -3,20 +3,27 @@ const supabase = require("../database/supabaseClient");
 // Adicionar comentário
 exports.adicionar = async (req, res) => {
   try {
-    const { userId, cidadeId, mensagem } = req.body;
+    const { userID, cidadeID, mensagem } = req.body;
+
+    if (!userID || !cidadeID) {
+      return res.status(400).json({ error: "userID e cidadeID são obrigatórios." });
+    }
 
     const { data, error } = await supabase
       .from("Comentarios")
       .insert([
         {
-          userID: userId,
-          cidadeID: cidadeId,
+          userID: userID,
+          cidadeID: cidadeID,
           mensagem,
         },
       ])
       .select();
 
-    if (error) return res.status(400).json({ error: error.message });
+    if (error) {
+      console.error("Erro Supabase ao adicionar comentário:", error);
+      return res.status(400).json({ error: error.message });
+    }
 
     return res.json(data[0]);
   } catch (err) {
@@ -40,7 +47,7 @@ exports.listarPorCidade = async (req, res) => {
       console.error("Erro Supabase ao listar comentários:", comentariosError);
       return res.status(400).json({ error: comentariosError.message });
     }
-    
+
     console.log("Comentários recebidos do Supabase:", comentarios);
 
 
@@ -49,40 +56,39 @@ exports.listarPorCidade = async (req, res) => {
     }
 
     const userIds = [...new Set(comentarios.map((c) => c.userID).filter(id => id))];
-    
+
     console.log("IDs de usuário extraídos:", userIds);
 
 
     if (userIds.length === 0) {
-      const comentariosSemUsuario = comentarios.map(c => ({...c, usuario: null}));
+      const comentariosSemUsuario = comentarios.map(c => ({ ...c, usuario: null }));
       console.log("Nenhum ID de usuário encontrado, retornando comentários sem usuário:", comentariosSemUsuario);
       return res.json(comentariosSemUsuario);
     }
 
     const { data: usuarios, error: usuariosError } = await supabase
       .from("Users")
-      .select("id, nome")
+      .select("id, nomeCompleto")
       .in("id", userIds);
 
     if (usuariosError) {
       console.error("Erro Supabase ao buscar usuários:", usuariosError);
-      const comentariosComUsuarioNull = comentarios.map(c => ({...c, usuario: null}));
+      const comentariosComUsuarioNull = comentarios.map(c => ({ ...c, usuario: null }));
       console.log("Erro ao buscar usuários, retornando comentários com usuário nulo:", comentariosComUsuarioNull);
       return res.json(comentariosComUsuarioNull);
     }
-    
+
     console.log("Usuários recebidos do Supabase:", usuarios);
 
 
-    const userMap = new Map(usuarios.map((u) => [u.id, u]));
-    console.log("Mapa de usuários criado:", userMap);
+    const userMap = new Map(usuarios.map((u) => [u.id, { nome: u.nomeCompleto }])); console.log("Mapa de usuários criado:", userMap);
 
 
     const comentariosComUsuario = comentarios.map((comentario) => ({
       ...comentario,
       usuario: userMap.get(comentario.userID) || null,
     }));
-    
+
     console.log("Comentários finais com dados do usuário:", comentariosComUsuario);
 
 

@@ -1,18 +1,9 @@
 const { createClient } = require("@supabase/supabase-js");
-
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE) {
-  console.error("Variáveis de ambiente do Supabase não carregadas!");
-}
+require("dotenv").config();
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
-  }
+  process.env.SUPABASE_SERVICE_ROLE_KEY // <- AGORA FUNCIONA
 );
 
 module.exports = supabase;

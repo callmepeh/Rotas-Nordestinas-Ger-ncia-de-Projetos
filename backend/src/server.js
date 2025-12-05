@@ -41,10 +41,11 @@ app.use("/como-chegar", comoChegarRoutes);
 const userRoutes = require("./routes/userRoutes.js");
 app.use("/usuarios", userRoutes);
 
-// const sugerirRoutes = require("./routes/sugerirRoutes.js");
-// app.use("/sugerir-rota", sugerirRoutes);
+// Rodar servidor somente fora de testes
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+}
 
-// Start
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+module.exports = app;

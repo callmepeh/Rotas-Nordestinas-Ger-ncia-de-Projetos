@@ -50,7 +50,7 @@ export default function Favourites() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        data: { userID: user.id, rotaID },
+        data: { userID: user.id, cidadeID: rotaID },
       });
       carregarFavoritos();
     } catch (err) {
