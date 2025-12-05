@@ -110,7 +110,7 @@ exports.buscarPorId = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
 
-    if (!data) {
+    if (!cidade) {
       return res.status(404).json({ error: "Cidade não encontrada." });
     }
 
